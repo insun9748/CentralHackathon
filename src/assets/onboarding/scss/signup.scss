@@ -1,0 +1,106 @@
+@use '../../common.scss' as *;
+
+.wrap {
+    .box {
+        margin: 0 auto;
+
+        .input_box {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+
+            p {
+                font-size: 15px;
+                font-weight: $medium;
+            }
+
+            input {
+                width: 353px;
+                height: 50px;
+                border: 1px solid $sub2;
+                border-radius: 15px;
+                padding: 18px 0 18px 21px;
+                font-size: 15px;
+                font-weight: $medium;
+                color: $text;
+
+                ::placeholder {
+                    color: #ACACAC;
+                    font-size: 12px;
+                    font-weight: $regular;
+                }
+            }
+
+            input:focus {
+                outline: none;
+            }
+
+
+            .id_input_box, 
+            .pw_input_box {
+                position: relative;
+                width: 100%;
+
+                input {
+                    width: 353px;
+                    height: 50px;
+                    border: 1px solid $sub2;
+                    border-radius: 15px;
+                    padding: 18px 0 18px 21px;
+                    font-size: 15px;
+                    font-weight: $medium;
+                    color: $text;
+
+                    ::placeholder {
+                        color: #ACACAC;
+                        font-size: 12px;
+                        font-weight: $regular;
+                    }
+                }
+
+                input:focus {
+                    outline: none;
+                }
+
+                .action_btn {
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    right: -40px;
+                    background: none;
+                    border: none;
+                    color: $sub1;
+                    font-size: 12px;
+                    font-weight: $regular;
+                }
+
+                .status_text {
+                    position: absolute;
+                    right: 20px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    background: none;
+                    border: none;
+                    color: $sub1;
+                    font-size: 12px;
+                    font-weight: $regular;
+                }
+
+                // 중복/불가일 때 색상 처리
+                .error {
+                    color: #ff4d4f;
+                }
+            }
+        }
+    }
+    .signup2{
+        margin: 107px auto 0 auto;
+        border: none;
+        border-radius: 15px;
+        background-color: $main;
+        color: #303030;
+        font-size: 15px;
+        font-weight: $semibold;
+        padding: 10px 60px;
+    }
+}

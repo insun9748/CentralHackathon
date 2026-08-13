@@ -1,0 +1,35 @@
+$main: #98FBCB;
+$sub1: #558B71;
+$sub2: #7ECFA8;
+$text: #303030;
+$bg: #E2FFF1;
+$white: #FFFFFF;
+
+$bold: 700;
+$semibold: 600;
+$medium: 500;
+$regular: 400;
+
+* {
+    font-family: "Pretendard Variable", Pretendard, sans-serif;
+    letter-spacing: 0%;
+}
+
+.wrap {
+    margin: 0 auto;
+    width: 393px;
+    min-height: 852px;
+}
+
+button {
+    cursor: pointer;
+    border-radius: 15px;
+}
+
+.onboarding_title {
+    margin: 96px auto 0 auto;
+    text-align: center;
+    font-size: 20px;
+    font-weight: $medium;
+    color: #000000;
+}

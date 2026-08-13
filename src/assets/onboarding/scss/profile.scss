@@ -1,0 +1,56 @@
+@use '../../common.scss' as *;
+
+.wrap {
+    .profile_main {
+        margin: 99px auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .title {
+            font-size: 15px;
+            font-weight: $medium;
+        }
+
+        .circle {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            border: 2px solid $main;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0 20px 0;
+        }
+
+        .detail {
+            font-size: 12px;
+            font-weight: $medium;
+            color: #ACACAC;
+        }
+    }
+
+    .profile_bot {
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+
+        .btn1 {
+            padding: 10px 60px;
+            background-color: $main;
+            color: $text;
+            font-size: 15px;
+            font-weight: $semibold;
+            border: none;
+        }
+
+        .btn2 {
+            padding: 10px 60px;
+            background-color: $white;
+            color: $text;
+            font-size: 15px;
+            font-weight: $semibold;
+            border: none;
+        }
+    }
+}

@@ -1,0 +1,77 @@
+@use '../../common.scss' as *;
+
+.wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    h2 {
+        margin: 96px auto 0 auto;
+        text-align: center;
+        font-size: 20px;
+        font-weight: $medium;
+        color: #000000;
+    }
+
+    .main_box {
+        margin: 126px auto 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+
+        .box {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 0 auto;
+
+            p {
+                font-size: 15px;
+                font-weight: $medium;
+            }
+
+            input {
+                width: 353px;
+                height: 50px;
+                border: 1px solid $sub2;
+                border-radius: 15px;
+                padding: 18px 0 18px 21px;
+                font-size: 15px;
+                font-weight: $medium;
+                color: $text;
+                ::placeholder {
+                    color: #ACACAC;
+                    font-size: 12px;
+                    font-weight: $regular;
+                }
+            }
+            input:focus {
+                outline: none;
+            }
+
+        }
+    }
+
+    .bot {
+        margin: 20px auto 115px auto;
+        text-align: center;
+
+        a {
+            font-size: 12px;
+            font-weight: $regular;
+            color: #ACACAC;
+            text-decoration: none;
+        }
+    }
+
+    button {
+        border: none;
+        border-radius: 15px;
+        background-color: $main;
+        color: #303030;
+        font-size: 15px;
+        font-weight: $semibold;
+        padding: 10px 60px;
+    }
+
+}
