@@ -35,6 +35,10 @@
   }
 
   &.bottom-nav-item-active {
-    color: $sub1;
+    color: $sub2;
+
+    .bottom-nav-icon {
+      filter: drop-shadow(0 0 9px rgba($main, 0.5));
+    }
   }
 }

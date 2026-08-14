@@ -1,0 +1,129 @@
+@use '../../common' as *;
+
+.report-wrap {
+  @include phone-frame;
+  position: relative;
+  background: $white;
+  padding: 24px 20px 110px;
+}
+
+.report-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.report-title {
+  @include font-medium-20;
+  color: $text;
+}
+
+.report-share-btn {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.report-period {
+  margin-bottom: 14px;
+}
+
+.report-chart-card {
+  background: $white;
+  border-radius: 15px;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
+  padding: 20px 17px 26px;
+  margin-bottom: 15px;
+}
+
+.report-ai-insight {
+  margin-top: 14px;
+}
+
+.report-ai-insight-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 10px;
+
+  img {
+    width: 13px;
+    height: 13px;
+  }
+
+  span {
+    font-family: 'Pretendard';
+    font-weight: 600;
+    font-size: 12px;
+    color: $sub1;
+  }
+}
+
+.report-ai-insight-text {
+  @include font-semibold-15;
+  color: $text;
+}
+
+.report-card {
+  margin-bottom: 12px;
+}
+
+.report-tip-card {
+  background: $white;
+  border-radius: 15px;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
+  padding: 22px 15px 26px;
+  margin-bottom: 25px;
+}
+
+.report-tip-title {
+  @include font-semibold-15;
+  color: $sub1;
+  margin-bottom: 17px;
+}
+
+.report-tip-list {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+}
+
+.report-safety-notice {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.report-safety-notice-header {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  img {
+    width: 19px;
+    height: 19px;
+  }
+
+  span {
+    font-family: 'Pretendard';
+    font-weight: 300;
+    font-size: 12px;
+    color: #6c6c6c;
+  }
+}
+
+.report-safety-notice-text {
+  font-family: 'Pretendard';
+  font-weight: 300;
+  font-size: 12px;
+  color: #6c6c6c;
+}

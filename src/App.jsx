@@ -8,6 +8,7 @@ import Signup from './pages/Onboarding/Signup.jsx'
 import Home from './pages/Home/Home.jsx'
 import TrackerMain from './pages/Tracker/Tracker_main.jsx'
 import TrackerDetail from './pages/Tracker/Tracker_detail.jsx'
+import Report from './pages/Report/Report.jsx'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
 
         <Route element={<Layout />}>
           <Route path="/home" element={<Home />} />
+          <Route path="/report" element={<Report />} />
         </Route>
 
         <Route element={<Layout />}>

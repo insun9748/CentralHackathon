@@ -1,0 +1,82 @@
+@use '../../assets/common' as *;
+
+.line-chart {
+  display: flex;
+  flex-direction: column;
+}
+
+.line-chart-plot {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+}
+
+.line-chart-y-axis {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 14px;
+}
+
+.line-chart-y-label {
+  @include font-regular-10;
+  color: #acacac;
+  text-align: center;
+}
+
+.line-chart-svg-wrap {
+  position: relative;
+  flex: 1;
+}
+
+.line-chart-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.line-chart-axis-line {
+  stroke: #acacac;
+  stroke-width: 1;
+}
+
+.line-chart-line {
+  stroke: $main;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.line-chart-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: $white;
+  border: 1px solid $main;
+  transform: translate(-50%, -50%);
+}
+
+.line-chart-x-axis {
+  display: flex;
+  margin-top: 8px;
+  padding-left: 20px;
+}
+
+.line-chart-x-label {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+}
+
+.line-chart-x-label-main {
+  @include font-medium-12;
+  color: $text;
+}
+
+.line-chart-x-label-range {
+  font-family: 'Pretendard';
+  font-weight: 300;
+  font-size: 8px;
+  color: #acacac;
+  margin-top: 2px;
+}

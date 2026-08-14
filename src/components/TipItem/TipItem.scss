@@ -1,0 +1,19 @@
+@use '../../assets/common' as *;
+
+.tip-item {
+  list-style: none;
+}
+
+.tip-item-title {
+  font-family: 'Pretendard';
+  font-weight: 600;
+  font-size: 14px;
+  color: $text;
+}
+
+.tip-item-desc {
+  @include font-regular-10;
+  color: #9d9d9d;
+  margin-top: 4px;
+  padding-left: 17px;
+}
