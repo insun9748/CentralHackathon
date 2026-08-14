@@ -1,0 +1,27 @@
+@use '../../assets/common' as *;
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: $main;
+  border-radius: 15px;
+  padding: 5px 20px 5px 15px;
+  box-shadow: 0 0 2px rgba(109, 152, 131, 0.5);
+
+  .btn-label {
+    @include font-medium-12;
+    color: $text;
+  }
+}
+
+.btn-icon {
+  width: 13px;
+  height: 13px;
+}
