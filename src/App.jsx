@@ -6,6 +6,8 @@ import Profile from './pages/Onboarding/Profile.jsx'
 import Info from './pages/Onboarding/Info.jsx'
 import Signup from './pages/Onboarding/Signup.jsx'
 import Home from './pages/Home/Home.jsx'
+import TrackerMain from './pages/Tracker/Tracker_main.jsx'
+import TrackerDetail from './pages/Tracker/Tracker_detail.jsx'
 import Report from './pages/Report/Report.jsx'
 
 function App() {
@@ -22,6 +24,12 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/report" element={<Report />} />
         </Route>
+
+        <Route element={<Layout />}>
+          <Route path="/tracker" element={<TrackerMain />} />
+          <Route path="/tracker/detail/:id" element={<TrackerDetail />} />
+        </Route>
+
       </Routes>
     </BrowserRouter>
   )
