@@ -6,6 +6,8 @@ import Profile from './pages/Onboarding/Profile.jsx'
 import Info from './pages/Onboarding/Info.jsx'
 import Signup from './pages/Onboarding/Signup.jsx'
 import Home from './pages/Home/Home.jsx'
+import TrackerMain from './pages/Tracker/Tracker_main.jsx'
+import TrackerDetail from './pages/Tracker/Tracker_detail.jsx'
 
 function App() {
   return (
@@ -20,6 +22,12 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/home" element={<Home />} />
         </Route>
+
+        <Route element={<Layout />}>
+          <Route path="/tracker" element={<TrackerMain />} />
+          <Route path="/tracker/detail/:id" element={<TrackerDetail />} />
+        </Route>
+
       </Routes>
     </BrowserRouter>
   )
