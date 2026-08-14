@@ -1,11 +1,11 @@
-@use '../../common.scss' as *;
+@use '../../style.scss' as *;
 
 .wrap {
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    h2 {
+    .login_title {
         margin: 96px auto 0 auto;
         text-align: center;
         font-size: 20px;
@@ -13,24 +13,25 @@
         color: #000000;
     }
 
-    .main_box {
+    .login_main_box {
         margin: 126px auto 0 auto;
         display: flex;
         flex-direction: column;
         gap: 30px;
 
-        .box {
+        .login_box {
             display: flex;
             flex-direction: column;
             gap: 12px;
             margin: 0 auto;
 
-            p {
+            .login_id,
+            .login_pw {
                 font-size: 15px;
                 font-weight: $medium;
             }
 
-            input {
+            .login_input {
                 width: 353px;
                 height: 50px;
                 border: 1px solid $sub2;
@@ -45,18 +46,18 @@
                     font-weight: $regular;
                 }
             }
-            input:focus {
+            .login_input:focus {
                 outline: none;
             }
 
         }
     }
 
-    .bot {
+    .login_bot {
         margin: 20px auto 115px auto;
         text-align: center;
 
-        a {
+        .login_fg {
             font-size: 12px;
             font-weight: $regular;
             color: #ACACAC;
@@ -64,7 +65,7 @@
         }
     }
 
-    button {
+    .login_btn {
         border: none;
         border-radius: 15px;
         background-color: $main;

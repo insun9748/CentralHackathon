@@ -17,13 +17,13 @@ function Onboarding() {
     }
     return (
         <div className='wrap'>
-            <div className="top">
+            <div className="ob_top">
                 
-                <h2>나만의 <span className='dots'> <img src={dot} className='dot' />입덧 패턴</span>을 <br /> 발견해주는 가장 쉬운 <span className='highlight'>기록<img src={img} alt="" className='pencil' /></span></h2>
+                <h2 className='ob_sub_title'>나만의 <span className='ob_dots'> <img src={dot} className='ob_dot' />입덧 패턴</span>을 <br /> 발견해주는 가장 쉬운 <span className='ob_highlight'>기록<img src={img} alt="" className='ob_pencil' /></span></h2>
                 
             </div>
-            <h1>덧로그</h1>
-            <div className="button">
+            <h1 className='ob_title'>덧로그</h1>
+            <div className="ob_button">
                 <button className='ob_login' onClick={handleLogin}>로그인</button>
                 <button className='ob_signup' onClick={handleSignup}>회원가입</button>
             </div>

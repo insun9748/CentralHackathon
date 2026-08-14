@@ -1,20 +1,23 @@
-@use '../../common.scss' as *;
+@use '../../style.scss' as *;
 
 .wrap {
-    .box {
-        margin: 0 auto;
+    .signup_box {
+        margin: 58px auto 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
 
-        .input_box {
+        .signup_input_box {
             display: flex;
             flex-direction: column;
             gap: 12px;
 
-            p {
+            .signup_p {
                 font-size: 15px;
                 font-weight: $medium;
             }
 
-            input {
+            .signup_input {
                 width: 353px;
                 height: 50px;
                 border: 1px solid $sub2;
@@ -31,17 +34,17 @@
                 }
             }
 
-            input:focus {
+            .signup_input:focus {
                 outline: none;
             }
 
 
-            .id_input_box, 
-            .pw_input_box {
+            .signup_id_input_box,
+            .signup_pw_input_box {
                 position: relative;
                 width: 100%;
 
-                input {
+                .signup_input {
                     width: 353px;
                     height: 50px;
                     border: 1px solid $sub2;
@@ -58,15 +61,15 @@
                     }
                 }
 
-                input:focus {
+                .signup_input:focus {
                     outline: none;
                 }
 
-                .action_btn {
+                .signup_action_btn {
                     position: absolute;
                     top: 50%;
                     transform: translateY(-50%);
-                    right: -40px;
+                    right: 20px;
                     background: none;
                     border: none;
                     color: $sub1;
@@ -74,7 +77,7 @@
                     font-weight: $regular;
                 }
 
-                .status_text {
+                .signup_status_text {
                     position: absolute;
                     right: 20px;
                     top: 50%;
@@ -93,7 +96,8 @@
             }
         }
     }
-    .signup2{
+
+    .signup_btn {
         margin: 107px auto 0 auto;
         border: none;
         border-radius: 15px;

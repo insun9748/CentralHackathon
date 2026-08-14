@@ -1,14 +1,14 @@
-@use '../../common' as *;
+@use '../../style' as *;
 
 .wrap {
-    .top {
+    .ob_top {
         margin: 181px auto 0 auto;
 
-        .dots {
+        .ob_dots {
             position: relative;
             display: inline-block;
 
-            .dot {
+            .ob_dot {
                 position: absolute;
                 top: -7px; 
                 left: 3px;
@@ -17,18 +17,18 @@
             }
         }
 
-        .highlight {
+        .ob_highlight {
             position: relative;
             display: inline-block;
 
-            .pencil {
+            .ob_pencil {
                 position: absolute;
                 bottom: 1px;
                 right: -13px;
             }
         }
 
-        h2 {
+        .ob_sub_title {
             text-align: center;
             color: $sub2;
             font-size: 20px;
@@ -36,7 +36,7 @@
         }
     }
 
-    h1 {
+    .ob_title {
         text-align: center;
         color: $sub2;
         font-size: 50px;
@@ -44,7 +44,7 @@
         margin: 47px auto 35px auto;
     }
 
-    .button {
+    .ob_button {
         display: flex;
         flex-direction: column;
         align-items: center;

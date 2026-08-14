@@ -13,23 +13,27 @@ function Info1() {
         <div className='wrap'>
             <h2 className='onboarding_title'>회원 정보 입력</h2>
 
-            <div className="box">
-                <div className="input_box">
-                    <p>닉네임</p>
-                    <input type="text" placeholder='2글자 이상' />
+            <div className="info_box">
+
+                <div className="info_input_box">
+                    <p className='info_p'>닉네임</p>
+                    <input type="text" className='info_input' placeholder='2글자 이상' />
                 </div>
-                <div className="input_box">
-                    <p>임신 주차</p>
-                    <input type="text" placeholder='n주차' />
+
+                <div className="info_input_box">
+                    <p className='info_p'>임신 주차</p>
+                    <input type="text" className='info_input' placeholder='n주차' />
                 </div>
-                <div className="input_box">
-                    <p>출산 예정일</p>
-                    <input type="text" placeholder='ex 20270707' />
+
+                <div className="info_input_box">
+                    <p className='info_p'>출산 예정일</p>
+                    <input type="text" className='info_input' placeholder='ex 20270707' />
                 </div>
+
             </div>
 
             <p className='info_detail'>회원정보는 마이페이지에서 수정할 수 있어요</p>
-            <button onClick={handleStart}>시작하기</button>
+            <button className='info_btn' onClick={handleStart}>시작하기</button>
         </div>
     )
 }
