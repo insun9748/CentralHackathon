@@ -1,0 +1,76 @@
+@use '../../style' as *;
+
+.wrap {
+    .ob_top {
+        margin: 181px auto 0 auto;
+
+        .ob_dots {
+            position: relative;
+            display: inline-block;
+
+            .ob_dot {
+                position: absolute;
+                top: -7px; 
+                left: 3px;
+                width: 75px; 
+                height: 10px;
+            }
+        }
+
+        .ob_highlight {
+            position: relative;
+            display: inline-block;
+
+            .ob_pencil {
+                position: absolute;
+                bottom: 1px;
+                right: -13px;
+            }
+        }
+
+        .ob_sub_title {
+            text-align: center;
+            color: $sub2;
+            font-size: 20px;
+            font-weight: $semibold;
+        }
+    }
+
+    .ob_title {
+        text-align: center;
+        color: $sub2;
+        font-size: 50px;
+        font-weight: bold;
+        margin: 47px auto 35px auto;
+    }
+
+    .ob_button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .ob_login {
+            width: 353px;
+            height: 71px;
+            background-color: $bg;
+            color: #428C6E;
+            font-size: 20px;
+            font-weight: $semibold;
+            border-radius: 15px;
+            border: none;
+            margin-bottom: 18px;
+        }
+
+        .ob_signup {
+            width: 353px;
+            height: 71px;
+            background-color: $white;
+            color: #428C6E;
+            font-size: 20px;
+            font-weight: $semibold;
+            border-radius: 15px;
+            border: 1px solid $sub2;
+            margin-bottom: 18px;
+        }
+    }
+}
