@@ -1,0 +1,73 @@
+@use '../../assets/common' as *;
+
+.line-chart {
+  display: flex;
+  flex-direction: column;
+}
+
+.line-chart-plot {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+}
+
+.line-chart-y-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 14px;
+  padding: 2px 0;
+}
+
+.line-chart-y-label {
+  @include font-regular-10;
+  color: #acacac;
+  text-align: center;
+}
+
+.line-chart-svg {
+  flex: 1;
+  height: 90px;
+}
+
+.line-chart-grid-line {
+  stroke: #f0f0f0;
+  stroke-width: 1;
+}
+
+.line-chart-line {
+  stroke: $sub1;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.line-chart-dot {
+  fill: $white;
+  stroke: $sub1;
+  stroke-width: 2;
+}
+
+.line-chart-x-axis {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  padding-left: 20px;
+}
+
+.line-chart-x-label {
+  text-align: center;
+}
+
+.line-chart-x-label-main {
+  @include font-medium-12;
+  color: $text;
+}
+
+.line-chart-x-label-range {
+  font-family: 'Pretendard';
+  font-weight: 300;
+  font-size: 8px;
+  color: #acacac;
+  margin-top: 2px;
+}

@@ -12,8 +12,12 @@ function BottomNav() {
           end
           className={({ isActive }) => `bottom-nav-item${isActive ? ' bottom-nav-item-active' : ''}`}
         >
-          <img className="bottom-nav-icon" src={item.icon} alt="" />
-          <span className="bottom-nav-label">{item.label}</span>
+          {({ isActive }) => (
+            <>
+              <img className="bottom-nav-icon" src={isActive ? item.activeIcon : item.icon} alt="" />
+              <span className="bottom-nav-label">{item.label}</span>
+            </>
+          )}
         </NavLink>
       ))}
     </nav>

@@ -6,6 +6,7 @@ import Profile from './pages/Onboarding/Profile.jsx'
 import Info from './pages/Onboarding/Info.jsx'
 import Signup from './pages/Onboarding/Signup.jsx'
 import Home from './pages/Home/Home.jsx'
+import Report from './pages/Report/Report.jsx'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
 
         <Route element={<Layout />}>
           <Route path="/home" element={<Home />} />
+          <Route path="/report" element={<Report />} />
         </Route>
       </Routes>
     </BrowserRouter>
