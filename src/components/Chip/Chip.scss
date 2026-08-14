@@ -1,0 +1,19 @@
+@use '../../assets/common' as *;
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: $white;
+  border: 1px solid $main;
+  border-radius: 15px;
+  padding: 4px 15px;
+  cursor: pointer;
+  @include font-medium-10;
+  color: $text;
+
+  &.chip-active {
+    background: $main;
+    border-color: $main;
+  }
+}
