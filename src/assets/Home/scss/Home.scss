@@ -1,16 +1,14 @@
 @use '../../common' as *;
 
 .home-wrap {
+  @include phone-frame;
   position: relative;
-  max-width: 393px;
-  margin: 0 auto;
-  min-height: 100vh;
   background: $white;
   padding-bottom: 90px;
 }
 
 .home-hero {
-  background: $bg;
+  background: #f5fffa;
   padding: 24px 20px 28px;
 }
 
@@ -67,11 +65,11 @@
   min-height: 81px;
   border-radius: 15px;
   background: $white;
-  box-shadow: inset 0 0 4px 0 $sub1;
+  box-shadow: inset 0 0 4px 0 $sub2;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 28px 20px;
 }
 
 .home-records-empty {

@@ -2,8 +2,8 @@
 $white: #FFFFFF;
 $bg: #E2FFF1;
 $main: #98FBCB;
-$sub1: #7ECFA8;
-$sub2: #558B71;
+$sub1: #558B71;
+$sub2: #7ECFA8;
 $text: #303030;
 
 // Fonts (Pretendard)
@@ -53,4 +53,11 @@ $text: #303030;
   font-family: 'Pretendard';
   font-weight: 400;
   font-size: 10px;
+}
+
+// Layout (iPhone 16 / 15 point size — matches the Figma frames)
+@mixin phone-frame {
+  width: 393px;
+  min-height: 852px;
+  margin: 0 auto;
 }

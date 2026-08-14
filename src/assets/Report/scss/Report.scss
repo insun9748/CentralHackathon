@@ -1,10 +1,8 @@
 @use '../../common' as *;
 
 .report-wrap {
+  @include phone-frame;
   position: relative;
-  max-width: 393px;
-  margin: 0 auto;
-  min-height: 100vh;
   background: $white;
   padding: 24px 20px 110px;
 }
@@ -43,7 +41,7 @@
   background: $white;
   border-radius: 15px;
   box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
-  padding: 10px 17px 20px;
+  padding: 20px 17px 26px;
   margin-bottom: 15px;
 }
 
@@ -55,9 +53,6 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  background: $bg;
-  border-radius: 20px;
-  padding: 5px 10px;
   margin-bottom: 10px;
 
   img {
@@ -86,7 +81,7 @@
   background: $white;
   border-radius: 15px;
   box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
-  padding: 14px 15px 20px;
+  padding: 22px 15px 26px;
   margin-bottom: 25px;
 }
 
