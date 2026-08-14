@@ -1,3 +1,7 @@
+@import 'pretendard/dist/web/static/Pretendard-Regular.css';
+@import 'pretendard/dist/web/static/Pretendard-Medium.css';
+@import 'pretendard/dist/web/static/Pretendard-SemiBold.css';
+
 * {
   margin: 0;
   padding: 0;

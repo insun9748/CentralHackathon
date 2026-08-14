@@ -1,0 +1,40 @@
+@use '../../assets/common' as *;
+
+.bottom-nav {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 393px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: $white;
+  box-shadow: 0 -1px 2px 0 rgba(48, 48, 48, 0.1);
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+  color: #acacac;
+
+  .bottom-nav-icon {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+  }
+
+  .bottom-nav-label {
+    @include font-medium-10;
+    color: inherit;
+  }
+
+  &.bottom-nav-item-active {
+    color: $sub1;
+  }
+}

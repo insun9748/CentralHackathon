@@ -7,7 +7,7 @@ function Info1() {
     const navigate = useNavigate();
 
     const handleStart = () => {
-        navigate('/'); //홈화면으로 연결 필요
+        navigate('/home');
     }
     return (
         <div className='wrap'>
