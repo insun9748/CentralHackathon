@@ -1,0 +1,134 @@
+@use '../../style.scss' as *;
+
+.mypage_wrap {
+    margin: 0 auto;
+    width: 393px;
+    height: 852px;
+    padding-top: 64px;
+    box-sizing: border-box;
+
+    .mypage_info {
+        background-color: #F5FFFA;
+        width: 100%;
+        height: 146px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 27px 83px 19px 23px;
+        box-sizing: border-box;
+
+        img {
+            width: 100px;
+            height: 100px;
+        }
+
+        section {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+
+            .mp_row {
+                display: flex;
+                width: 134px;
+                justify-content: space-between;
+                align-items: center;
+
+                .mp_row_left {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+
+                    .mp_label {
+                        font-size: 12px;
+                        font-weight: $regular;
+                        color: #ACACAC;
+                    }
+
+                    .mp_value {
+                        font-size: 15px;
+                        font-weight: $medium;
+                        color: $text;
+                    }
+
+                    .mp_value_nickname {
+                        font-size: 15px;
+                        font-weight: $semibold;
+                        color: $sub1;
+                    }
+
+
+                }
+
+                img {
+                    width: 14px;
+                    height: 14px;
+                    cursor: pointer;
+                }
+
+
+            }
+        }
+
+
+    }
+
+    .mp_bot_bar {
+        width: 100%;
+        height: 10px;
+        background-color: #F7F7F7;
+    }
+
+    .mp_setting_title {
+        height: 50px;
+        width: 100%;
+        padding: 15px 20px;
+        font-size: 15px;
+        font-weight: $medium;
+        box-sizing: border-box;
+        border-bottom: 0.5px solid #DADADA;
+    }
+
+    .mp_setting_detail {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        height: 70px;
+        padding: 21px 44px;
+        box-sizing: border-box;
+        border-bottom: 0.5px solid #DADADA;
+        .mp_st_left{
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            img{
+                width: 27px; height: 27px;
+            }
+            p{
+               font-size: 15px; 
+               font-weight: $medium;
+               color: $text;
+            }
+        }
+
+        img{
+            cursor: pointer;
+            width: 8px; height: 17px;
+        }
+    }
+
+    .mp_logout{
+        margin: 280px 0 50px 42px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        img{
+            width: 24px; height: 24px;
+        }
+        p{
+            font-size: 15px;
+            font-weight: $semibold;
+            color: #ACACAC;
+        }
+    }
+}

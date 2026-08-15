@@ -9,7 +9,7 @@ function BottomNav() {
         <NavLink
           key={item.to}
           to={item.to}
-          end
+          // end
           className={({ isActive }) => `bottom-nav-item${isActive ? ' bottom-nav-item-active' : ''}`}
         >
           {({ isActive }) => (
