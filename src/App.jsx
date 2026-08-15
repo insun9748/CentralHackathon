@@ -9,6 +9,7 @@ import Home from './pages/Home/Home.jsx'
 import TrackerMain from './pages/Tracker/Tracker_main.jsx'
 import TrackerDetail from './pages/Tracker/Tracker_detail.jsx'
 import Report from './pages/Report/Report.jsx'
+import TrackerWeek from './pages/Tracker/Tracker_week.jsx'
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/tracker" element={<TrackerMain />} />
           <Route path="/tracker/detail/:id" element={<TrackerDetail />} />
+          <Route path="/tracker/week" element={<TrackerWeek />} />
         </Route>
 
       </Routes>

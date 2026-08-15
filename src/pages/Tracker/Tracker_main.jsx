@@ -12,9 +12,17 @@ import cardArrow from '../../assets/tracker/img/tracker_card_arrow.svg';
 
 function Tracker_main() {
   // 1. 상태값 정의
-  // 기준 연/월 (초기값: 현재 날짜 기준)
-  const [currentDate, setCurrentDate] = useState(new Date(2026, 7, 1)); // 2026년 8월 (월은 0부터 시작하므로 7 = 8월)
-  const [selectedDay, setSelectedDay] = useState(20); // 선택된 날짜
+
+  // 실제 오늘 날짜 (기준값)
+  const realToday = new Date();
+
+  // 2. 기준 연/월의 초기값을 오늘 날짜의 1일로 설정
+  const [currentDate, setCurrentDate] = useState(
+    new Date(realToday.getFullYear(), realToday.getMonth(), 1)
+  );
+
+  // 3. 선택된 일자의 초기값을 오늘의 '일(day)'로 설정
+  const [selectedDay, setSelectedDay] = useState(realToday.getDate());
 
   // 더미 사용자 데이터 (나중에 백엔드 API 연동 자리)
   const [pregnancyInfo, setPregnancyInfo] = useState({
@@ -57,22 +65,16 @@ function Tracker_main() {
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth(); // 0 ~ 11
 
-  // 이번 달 1일의 요일 (0: 일요일, 1: 월요일, ... 6: 토요일)
   const firstDayIndex = new Date(year, month, 1).getDay();
-  // 이번 달의 총 일수
   const lastDate = new Date(year, month + 1, 0).getDate();
 
-  // 달력 빈칸 + 날짜 채우기 배열
   const calendarDays = [];
-  // 1일 시작 전 빈 칸 채우기
   for (let i = 0; i < firstDayIndex; i++) {
     calendarDays.push(null);
   }
-  // 1일부터 마지막 날까지 채우기
   for (let i = 1; i <= lastDate; i++) {
     calendarDays.push(i);
   }
-  // 31일 뒤쪽 빈 칸 채우기 (7의 배수가 될 때까지 빈 칸 추가)
   while (calendarDays.length % 7 !== 0) {
     calendarDays.push(null);
   }
@@ -84,6 +86,21 @@ function Tracker_main() {
     if (emotion === 'bad') return <img src={badIcon} alt="나쁨" className="tracker_emotion_img" />;
     return null;
   };
+
+  //현재 날짜로 돌아가는 버튼
+  //월, 일이 모두 오늘과 일치하는지 비교
+  const isToday =
+    currentDate.getFullYear() === realToday.getFullYear() &&
+    currentDate.getMonth() === realToday.getMonth() &&
+    selectedDay === realToday.getDate();
+
+  // '오늘' 버튼 클릭 시 현재 연/월/일로 즉시 복귀
+  const handleGoToday = () => {
+    setCurrentDate(new Date(realToday.getFullYear(), realToday.getMonth(), 1));
+    setSelectedDay(realToday.getDate());
+  };
+
+
 
   // 하단 기록 리스트 더미 데이터 (백엔드 연동)
   const mockRecords = [
@@ -123,6 +140,11 @@ function Tracker_main() {
     navigate(`/tracker/detail/${id}`); // 상세 페이지 라우트에 맞게 지정
   };
 
+  const handleThisWeek = (id) => {
+    navigate(`/tracker/week`); 
+  };
+
+
 
 
   return (
@@ -134,7 +156,7 @@ function Tracker_main() {
         <h3 className="tracker_main_week">
           임신 {pregnancyInfo.weeks}주 {pregnancyInfo.days}일차에요
         </h3>
-        <button type="button" className="tracker_info_link_btn">
+        <button type="button" className="tracker_info_link_btn" onClick={handleThisWeek}>
           이번 주 임신 정보 보러가기 <img src={arrowRightIcon} alt="" />
         </button>
       </div>
@@ -160,11 +182,15 @@ function Tracker_main() {
             }
 
             const isSelected = day === selectedDay;
+            const isRealToday =
+              currentDate.getFullYear() === realToday.getFullYear() &&
+              currentDate.getMonth() === realToday.getMonth() &&
+              day === realToday.getDate();
 
             return (
               <div
                 key={`day-${day}`}
-                className={`tracker_day_cell ${isSelected ? 'selected' : ''}`}
+                className={`tracker_day_cell ${isSelected ? 'selected' : ''} ${isRealToday ? 'today' : ''}`}
                 onClick={() => setSelectedDay(day)}
               >
                 <span className="tracker_day_num">{day}</span>
@@ -173,6 +199,16 @@ function Tracker_main() {
             );
           })}
         </div>
+
+        {!isToday && (
+          <button
+            type="button"
+            className="tracker_main_today"
+            onClick={handleGoToday}
+          >
+            오늘→
+          </button>
+        )}
       </div>
 
       <div className="tracker_record_section">
@@ -196,7 +232,7 @@ function Tracker_main() {
                     {getEmotionImg(item.emotion)}
                   </div>
                 </div>
-                <img src={cardArrow} className="tracker_card_arrow" onClick={() => handleCardClick(item.id)}/>
+                <img src={cardArrow} className="tracker_card_arrow" onClick={() => handleCardClick(item.id)} />
               </div>
 
               {/* 본문 제목 */}

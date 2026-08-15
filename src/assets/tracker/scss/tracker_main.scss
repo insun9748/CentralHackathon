@@ -5,6 +5,7 @@
     width: 353px;
     min-height: 782px;
     padding-top: 70px;
+    margin-bottom: 120px;
 
     .tracker_main_title {
         font-size: 20px;
@@ -40,6 +41,7 @@
             gap: 12px;
             margin-bottom: 9px;
             margin-left: 12px;
+            position: relative;
 
             .tracker_month_title {
                 font-size: 20px;
@@ -109,7 +111,7 @@
                 /*선택된 날짜 스타일 */
                 &.selected {
                     border: 1px solid $sub1;
-                    background-color: $bg;
+                    background-color: #F8FFFC;
                     border-radius: 3px;
                     position: relative;
                     z-index: 1;
@@ -120,14 +122,33 @@
                         font-size: 10px;
                     }
                 }
+
+                &.today {
+                    background-color: $bg;
+                }
             }
+        }
+
+        .tracker_main_today {
+            padding: 3px 12px;
+            box-shadow: 0px 0px 5px 0px #DADADA;
+            border: 0px;
+            border-radius: 5px;
+            background-color: $white;
+            font-weight: 100;
+            font-size: 10px;
+            color: $text;
+            position: absolute;
+            top: 530px;
+            left: 50%;
+            transform: translateX(-50%);
         }
     }
 
 
     //하단 카드 영역
     .tracker_record_section {
-        margin-top: 40px;
+        margin-top: 84px;
 
         //날짜 타이틀
         .record_section_title {
