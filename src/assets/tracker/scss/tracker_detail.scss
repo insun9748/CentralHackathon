@@ -6,12 +6,15 @@
     min-height: 782px;
     padding-top: 75px;
     box-sizing: border-box;
+    margin-bottom: 120px;
 
+    /* 상단 헤더 */
     .tracker_detail_header {
         display: flex;
         position: relative;
         align-items: center;
         justify-content: center;
+
 
         .tracker_detail_back_btn {
             position: absolute;
@@ -31,24 +34,23 @@
         }
     }
 
-    .tracker_detail_card {
+    /* 본문 영역 */
+    .tracker_detail_body {
         display: flex;
         flex-direction: column;
-        gap: 12px;
-        margin-top: 34px;
+        gap: 16px;
+        width: 100%;
 
-        .detail_card_1 {
+        /* 카드 공통 스타일 */
+        .tracker_detail_card {
             width: 100%;
-            height: 175px;
             box-sizing: border-box;
-            padding: 17px 0 17px 16px;
             border-radius: 15px;
-            box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
 
-            .row {
+            .tracker_row {
                 display: flex;
                 align-items: center;
 
@@ -61,75 +63,7 @@
                     text-align: left;
                 }
 
-                .tracker_value {
-                    font-size: 12px;
-                    font-weight: $medium;
-                    color: $text;
-                    text-align: left;
-                }
-
-                .tracker_tag_group {
-                    display: flex;
-                    gap: 10px;
-                    flex-wrap: wrap;
-                }
-
-                .tracker_cause_tag {
-                    padding: 3px 10px;
-                    border: 1px solid #FFD7D9;
-                    border-radius: 15px;
-                    color: #FF2424;
-                    font-size: 12px;
-                    font-weight: $medium;
-                }
-            }
-        }
-
-        .detail_card_2 {
-            width: 100%;
-            min-height: 100px;
-            box-sizing: border-box;
-            padding: 13px 49px 19px 16px;
-            border-radius: 15px;
-            box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-
-            .tracker_label {
-                width: 60px;
-                flex-shrink: 0;
-                font-size: 12px;
-                font-weight: $medium;
-                color: #ACACAC;
-                text-align: left;
-            }
-
-            .tracker_value {
-                font-size: 12px;
-                font-weight: $medium;
-                color: $text;
-                text-align: left;
-            }
-        }
-
-        .detail_card_3 {
-            width: 100%;
-            min-height: 200px;
-            box-sizing: border-box;
-            padding: 25px 18px;
-            border-radius: 15px;
-            border: none;
-            background-color: #F5FFFA;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-
-            .row {
-                display: flex;
-                align-items: center;
-
-                .tracker_label {
+                .tracker_mint_label {
                     width: 121px;
                     flex-shrink: 0;
                     font-size: 12px;
@@ -149,23 +83,113 @@
                     }
                 }
 
+                /* 수정 모드 input 스타일 */
+                .tracker_edit_input {
+                    flex: 1;
+                    border: none;
+                    font-size: 12px;
+                    font-weight: $medium;
+                    color: $text;
+                    text-align: left;
+                    outline: none;
 
+                }
+
+                /* 유발원인 핑크 태그 */
+                .tracker_tag_group {
+                    display: flex;
+                    gap: 10px;
+                    flex-wrap: wrap;
+
+                    .tracker_cause_tag {
+                        padding: 3px 10px;
+                        border: 1px solid #FFD7D9;
+                        border-radius: 15px;
+                        color: #FF2424;
+                        font-size: 12px;
+                        font-weight: $medium;
+                    }
+                }
+            }
+        }
+
+        .info_card {
+            height: 175px;
+            margin-top: 34px;
+            padding: 17px 0 17px 16px;
+            box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 기록 원문 카드 */
+        .original_card {
+            min-height: 100px;
+            padding: 13px 49px 19px 16px;
+            box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
+
+            .tracker_card_subtitle {
+                width: 60px;
+                flex-shrink: 0;
+                font-size: 12px;
+                font-weight: $medium;
+                color: #ACACAC;
+                text-align: left;
             }
 
+            .tracker_original_content {
+                font-size: 12px;
+                font-weight: $medium;
+                color: $text;
+                text-align: left;
+                overflow: scroll;
+                word-break: break-all;
+                scrollbar-width: none;
+            }
 
+            /* 수정 모드 textarea 스타일 */
+            .tracker_edit_textarea {
+                font-size: 12px;
+                font-weight: $medium;
+                color: $text;
+                text-align: left;
+                border: none;
+                padding-top: 8px;
+                outline: none;
+                resize: none;
 
-
+            }
         }
-    }
 
-    .tracker_detail_btn{
-        margin: 25px auto 0 auto;
-        padding: 5px 20px;
-        display: flex;
-        border: 2px solid $main;
-        background-color: #fff;
-        color: $text;
-        font-size: 12px;
-        font-weight: $medium;
+        /* AI 분석 요약 카드 */
+        .analysis_card {
+            min-height: 200px;
+            padding: 25px 18px;
+            background-color: #F5FFFA;
+            border: none;
+
+            .tracker_edit_input {
+                background-color: #F5FFFA;
+            }
+        }
+
+        /* 하단 버튼 영역 */
+        .tracker_button_container {
+            display: flex;
+            justify-content: center;
+
+
+            .tracker_edit_button,
+            .tracker_save_button {
+                margin: 25px auto 0 auto;
+                padding: 5px 20px;
+                display: flex;
+                border: 2px solid $main;
+                background-color: #fff;
+                color: $text;
+                font-size: 12px;
+                font-weight: $medium;
+            }
+
+            
+        }
     }
 }
