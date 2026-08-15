@@ -10,6 +10,10 @@ import TrackerMain from './pages/Tracker/Tracker_main.jsx'
 import TrackerDetail from './pages/Tracker/Tracker_detail.jsx'
 import Report from './pages/Report/Report.jsx'
 import TrackerWeek from './pages/Tracker/Tracker_week.jsx'
+import MyPage from './pages/MyPage/MyPage.jsx'
+import MyPage_notification from './pages/MyPage/MyPage_notification.jsx'
+import MyPage_authority from './pages/MyPage/MyPage_authority.jsx'
+import MyPage_edit from './pages/MyPage/MyPage_edit.jsx'
 
 function App() {
   return (
@@ -30,6 +34,13 @@ function App() {
           <Route path="/tracker" element={<TrackerMain />} />
           <Route path="/tracker/detail/:id" element={<TrackerDetail />} />
           <Route path="/tracker/week" element={<TrackerWeek />} />
+        </Route>
+
+        <Route element={<Layout />}>
+          <Route path="/mypage" element={<MyPage />} />
+          <Route path="/mypage/notification" element={<MyPage_notification />} />
+          <Route path="/mypage/authority" element={<MyPage_authority />} />
+          <Route path="/mypage/edit" element={<MyPage_edit />} />
         </Route>
 
       </Routes>

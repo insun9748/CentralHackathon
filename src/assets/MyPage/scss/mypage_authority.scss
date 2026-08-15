@@ -1,0 +1,108 @@
+@use '../../style.scss' as *;
+
+.mypage_authority_wrap {
+    margin: 0 auto;
+    width: 393px;
+    height: 852px;
+    padding-top: 75px;
+    box-sizing: border-box;
+
+    /* 상단 헤더 */
+    .mypage_authority_header {
+        display: flex;
+        position: relative;
+        align-items: center;
+        justify-content: center;
+
+
+        .mypage_authority_back_btn {
+            position: absolute;
+            left: 20px;
+            cursor: pointer;
+            height: 15px;
+            width: 13px;
+        }
+
+        .mypage_authority_title {
+            position: relative;
+            display: flex;
+            text-align: center;
+            font-size: 20px;
+            font-weight: $medium;
+            color: $text;
+        }
+
+
+    }
+
+    .authority_list_section {
+        margin-top: 43px;
+        border-top: 0.5px solid #DADADA;
+
+        .authority_item {
+            width: 393px;
+            height: 70px;
+            padding: 25px 37px 23px 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            border-bottom: 0.5px solid #DADADA;
+
+            .at_item_left {
+                display: flex;
+                gap: 15px;
+                align-items: center;
+            }
+
+
+
+            .at_toggle_switch {
+                position: relative;
+                display: inline-block;
+                width: 33px;
+                height: 20px;
+
+                input {
+                    opacity: 0;
+                    width: 0;
+                    height: 0;
+
+                    &:checked+.slider {
+                        background-color: $main; // 활성화 민트색
+
+                        &:before {
+                            transform: translateX(13px);
+                        }
+                    }
+                }
+            }
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #DADADA; // 비활성화 회색
+                transition: 0.3s;
+                border-radius: 20px;
+
+                &:before {
+                    position: absolute;
+                    content: '';
+                    height: 16.5px;
+                    width: 16.67px;
+                    left: 2px;
+                    bottom: 2px;
+                    background-color: #ffffff;
+                    transition: 0.3s;
+                    border-radius: 50%;
+                }
+
+            }
+
+        }
+
+    }
+}

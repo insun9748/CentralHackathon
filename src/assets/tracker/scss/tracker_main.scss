@@ -35,13 +35,13 @@
 
     /* 달력 섹션 */
     .tracker_calendar_container {
+        width: 100%;
         .tracker_calendar_month_bar {
             display: flex;
             align-items: center;
             gap: 12px;
             margin-bottom: 9px;
             margin-left: 12px;
-            position: relative;
 
             .tracker_month_title {
                 font-size: 20px;
@@ -138,10 +138,9 @@
             font-weight: 100;
             font-size: 10px;
             color: $text;
-            position: absolute;
-            top: 530px;
-            left: 50%;
-            transform: translateX(-50%);
+            display: flex;
+            margin: 50px auto -74px auto;
+           
         }
     }
 

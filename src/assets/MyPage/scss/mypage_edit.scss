@@ -1,0 +1,146 @@
+@use '../../style.scss' as *;
+
+.mypage_edit_wrap {
+    margin: 0 auto;
+    width: 353px;
+    height: 852px;
+    padding-top: 75px;
+    box-sizing: border-box;
+
+    /* 상단 헤더 */
+    .mypage_edit_header {
+        display: flex;
+        position: relative;
+        align-items: center;
+        justify-content: center;
+
+
+        .mypage_edit_back_btn {
+            position: absolute;
+            left: 0;
+            cursor: pointer;
+            height: 15px;
+            width: 13px;
+        }
+
+        .mypage_edit_title {
+            position: relative;
+            display: flex;
+            text-align: center;
+            font-size: 20px;
+            font-weight: $medium;
+            color: $text;
+        }
+    }
+
+    .mypage_edit_body {
+        width: 100%;
+
+        .profile_edit_section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 34px;
+
+            .profile_image_container {
+                position: relative;
+
+                .profile_img {
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                }
+
+                &:hover {
+                    .profile_img {
+                        background-color: #F3F3F3;
+                        opacity: 40%;
+                        cursor: pointer;
+                    }
+
+                    .profile_camera {
+                        opacity: 1;
+                    }
+                }
+
+                .profile_camera {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    opacity: 0;
+                }
+
+                input {
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 50%;
+                }
+
+            }
+
+            .photo_change_text {
+                margin-top: 11px;
+                background-color: $white;
+                border: none;
+                font-size: 12px;
+                font-weight: $regular;
+                color: #ACACAC;
+            }
+
+        }
+
+
+        .edit_form_group {
+            display: flex;
+            flex-direction: column;
+            margin: 35px 0 106px 0;
+            gap: 30px;
+
+            .pf_form_item {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+
+                .pf_form_label {
+                    margin-left: 10px;
+                    font-size: 15px;
+                    font-weight: $medium;
+                }
+
+                .pf_form_input {
+                    width: 100%;
+                    height: 50px;
+                    border: 1px solid $sub2;
+                    border-radius: 15px;
+                    padding: 18px 20px;
+                    box-sizing: border-box;
+                    outline: none;
+                }
+            }
+        }
+
+        .edit_button_container {
+            display: flex;
+            justify-content: center;
+            margin-top: 106px;
+
+            .save_submit_btn {
+                padding: 10px 60px;
+                background-color: #ECECEC;
+                font-size: 15px;
+                font-weight: $semibold;
+                color: $text;
+                border: none;
+                cursor: pointer;
+
+                &.active {
+                    background-color: $main;
+                }
+            }
+
+        }
+
+    }
+}
