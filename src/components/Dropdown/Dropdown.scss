@@ -2,6 +2,7 @@
 
 .dropdown {
   position: relative;
+  height: 40px;
 }
 
 .dropdown-trigger {
@@ -28,20 +29,16 @@
   width: 7px;
   height: 15px;
   transform: rotate(90deg);
-  transition: transform 0.15s ease;
-}
-
-.dropdown-trigger-open .dropdown-trigger-icon {
-  transform: rotate(-90deg);
 }
 
 .dropdown-panel {
   position: absolute;
-  top: calc(100% + 4px);
+  top: 0;
   left: 0;
   right: 0;
   background: $white;
   border: 1px solid #d1d1d1;
+  border-bottom: none;
   border-radius: 10px;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
   overflow: hidden;
@@ -53,9 +50,11 @@
   height: 40px;
   display: flex;
   align-items: center;
-  padding: 0 25px;
+  justify-content: space-between;
+  padding: 0 25px 0 24px;
   background: $white;
   border: none;
+  border-radius: 0;
   border-bottom: 0.5px solid #acacac;
   cursor: pointer;
   font-family: 'Pretendard';
@@ -67,4 +66,16 @@
   &:last-child {
     border-bottom: none;
   }
+}
+
+.dropdown-option-selected {
+  background: #acacac;
+  border-radius: 0;
+  border-bottom: 0;
+}
+
+.dropdown-option-chevron {
+  width: 7px;
+  height: 15px;
+  transform: rotate(-90deg);
 }

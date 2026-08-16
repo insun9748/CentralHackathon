@@ -1,0 +1,50 @@
+@use '../../assets/common' as *;
+
+.period-selector {
+  position: relative;
+}
+
+.period-selector-trigger {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: $white;
+  border: 1px solid #d1d1d1;
+  border-radius: 10px;
+  padding: 0 15px;
+  cursor: pointer;
+}
+
+.period-selector-trigger-open {
+  border-radius: 10px 10px 0 0;
+}
+
+.period-selector-trigger-content {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.period-selector-calendar-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.period-selector-trigger-label {
+  font-family: 'Pretendard';
+  font-weight: 400;
+  font-size: 15px;
+  color: $text;
+}
+
+.period-selector-chevron {
+  width: 7px;
+  height: 15px;
+  transform: rotate(90deg);
+}
+
+.period-selector-chevron-open {
+  transform: rotate(-90deg);
+}

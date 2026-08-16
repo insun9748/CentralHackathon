@@ -1,0 +1,86 @@
+@use '../../assets/common' as *;
+
+.ai-analysis-card {
+  background: rgba(226, 255, 241, 0.2);
+  border-radius: 15px;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.1);
+  filter: drop-shadow(0 0 0.5px $main);
+  padding: 17px 15px;
+}
+
+.ai-analysis-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+
+.ai-analysis-header-progress {
+  @include font-medium-12;
+  color: #acacac;
+}
+
+.ai-analysis-header-icon {
+  width: 17px;
+  height: 17px;
+}
+
+.ai-analysis-header-done {
+  @include font-medium-12;
+  color: $main;
+}
+
+.ai-analysis-list {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.ai-analysis-item {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.ai-analysis-item-check {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.ai-analysis-item-label {
+  @include font-medium-12;
+  width: 118px;
+  flex-shrink: 0;
+  color: #dadada;
+}
+
+.ai-analysis-item-value {
+  @include font-medium-12;
+  color: $text;
+}
+
+.ai-analysis-item-input {
+  @include font-medium-12;
+  flex: 1;
+  min-width: 0;
+  color: $text;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid $sub2;
+  padding: 0 0 2px;
+
+  &:focus {
+    outline: none;
+    border-bottom-color: $sub1;
+  }
+}
+
+select.ai-analysis-item-input {
+  cursor: pointer;
+}
+
+.ai-analysis-item.is-done .ai-analysis-item-label {
+  color: $sub1;
+}

@@ -50,10 +50,71 @@
   position: absolute;
   width: 10px;
   height: 10px;
+  padding: 0;
   border-radius: 50%;
   background: $white;
   border: 1px solid $main;
   transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+.line-chart-dot-active {
+  z-index: 1;
+}
+
+.line-chart-guide {
+  position: absolute;
+  top: 0;
+  border-left: 0.3px solid #acacac;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.line-chart-emoji {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.line-chart-tooltip {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 5px 7px;
+  background: rgba(226, 255, 241, 0.2);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 0.5px solid #dfdfdf;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.line-chart-tooltip-row {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  font-family: 'Pretendard';
+  font-size: 10px;
+}
+
+.line-chart-tooltip-value {
+  font-weight: 500;
+}
+
+.line-chart-tooltip-value-mint {
+  color: #428c6e;
+}
+
+.line-chart-tooltip-value-red {
+  color: #ff2424;
+}
+
+.line-chart-tooltip-label {
+  color: $text;
+  font-weight: 400;
 }
 
 .line-chart-x-axis {

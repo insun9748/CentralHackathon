@@ -1,34 +1,54 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import '../../assets/tracker/scss/tracker_detail.scss';
 
 // 뒤로가기 아이콘 import
 import arrowLeftIcon from '../../assets/tracker/img/tracker_left.svg';
 
+// 카드에서 전달받은 기록이 없을 때 보여줄 기본값 (더미)
+const defaultDetailData = {
+  date: '2026.08.16',
+  timeRange: '저녁 | 18:00~00:00',
+  intensity: '4(심함)',
+  triggers: ['김치'],
+  type: '음식',
+  originalText:
+    '저녁을 먹으면서 김치를 같이 먹었는데 김치 냄새와 맛 때문인지 속이 갑자기 미식거렸다. 계속 속이 불편해서 저녁을 제대로 먹지 못해서 힘들었다.',
+  analysis: {
+    cause: '김치',
+    symptomSummary: '미식거림',
+    nauseaType: '음식',
+    reliefFactor: '발견되지 않음',
+    situation: '저녁 식사 중',
+    condition: '속이 불편해 식사 어려움',
+  },
+};
+
 function TrackerDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   // 1. 수정 모드 여부 상태 (true: 수정 중, false: 조회 중)
   const [isEditing, setIsEditing] = useState(false);
 
   // 2. 상세 데이터 상태
-  const [detailData, setDetailData] = useState({
-    date: '2026.08.16',
-    timeRange: '저녁 | 18:00~00:00',
-    intensity: '4(심함)',
-    triggers: ['김치'],
-    type: '음식',
-    originalText:
-      '저녁을 먹으면서 김치를 같이 먹었는데 김치 냄새와 맛 때문인지 속이 갑자기 미식거렸다. 계속 속이 불편해서 저녁을 제대로 먹지 못해서 힘들었다.',
-    analysis: {
-      cause: '김치',
-      symptomSummary: '미식거림',
-      nauseaType: '음식',
-      reliefFactor: '발견되지 않음',
-      situation: '저녁 식사 중',
-      condition: '속이 불편해 식사 어려움',
-    },
+  // 기록 카드에서 넘어온 경우(location.state) 실제 입력한 원문/분석 결과를 그대로 보여주고,
+  // 없으면(직접 URL 접근 등) 더미 데이터로 대체
+  const [detailData, setDetailData] = useState(() => {
+    const passedRecord = location.state;
+    if (!passedRecord) return defaultDetailData;
+
+    return {
+      ...defaultDetailData,
+      timeRange: passedRecord.timeCategory ?? defaultDetailData.timeRange,
+      intensity:
+        passedRecord.intensity !== undefined ? `${passedRecord.intensity}` : defaultDetailData.intensity,
+      triggers: passedRecord.triggerType ? [passedRecord.triggerType] : defaultDetailData.triggers,
+      type: passedRecord.analysis?.nauseaType ?? defaultDetailData.type,
+      originalText: passedRecord.originalText ?? defaultDetailData.originalText,
+      analysis: passedRecord.analysis ?? defaultDetailData.analysis,
+    };
   });
 
   // 3. 입력값 변경 핸들러

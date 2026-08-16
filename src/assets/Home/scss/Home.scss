@@ -46,6 +46,31 @@
   margin: 0 auto;
 }
 
+.home-record-text {
+  @include font-medium-12;
+  color: $text;
+  background: $white;
+  border: 1px solid $sub2;
+  border-radius: 15px;
+  min-height: 80px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+}
+
+.home-analysis-card {
+  margin-bottom: 24px;
+}
+
+.home-analysis-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.home-ai-progress-btn {
+  cursor: default;
+}
+
 .home-divider {
   height: 5px;
   background: #f7f7f7;
@@ -77,9 +102,4 @@
   font-weight: 400;
   font-size: 15px;
   color: #6d9883;
-}
-
-.home-records-item {
-  @include font-regular-12;
-  color: $text;
 }

@@ -16,23 +16,7 @@
   padding: 0;
 }
 
-.emoji-scale-face {
-  position: relative;
-  display: block;
-  width: 46px;
-  height: 46px;
-}
-
-.emoji-scale-face-bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.emoji-scale-face-layer {
-  position: absolute;
-}
+// 얼굴 이모지 자체 스타일은 src/components/EmojiFace/EmojiFace.scss 에서 관리
 
 .emoji-scale-label {
   @include font-regular-10;

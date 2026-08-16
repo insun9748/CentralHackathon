@@ -26,6 +26,17 @@
   }
 }
 
+.factor-list-plain {
+  background: $white;
+  border-color: transparent;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
+
+  .factor-list-title,
+  .factor-list-item-label {
+    color: $text;
+  }
+}
+
 .factor-list-header {
   display: flex;
   align-items: center;

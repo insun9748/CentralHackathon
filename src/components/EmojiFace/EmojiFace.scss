@@ -1,0 +1,25 @@
+.emoji-face {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.emoji-face-scaler {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 46px;
+  height: 46px;
+  transform-origin: top left;
+}
+
+.emoji-face-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.emoji-face-layer {
+  position: absolute;
+}

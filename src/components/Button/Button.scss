@@ -21,6 +21,44 @@
   }
 }
 
+.btn-outline {
+  background: $white;
+  border: 1px solid $main;
+  border-radius: 15px;
+  padding: 5px 20px;
+  filter: drop-shadow(0 0 1px $main);
+
+  .btn-label {
+    @include font-medium-12;
+    color: $text;
+  }
+}
+
+.btn-disabled {
+  background: $main;
+  border-radius: 15px;
+  padding: 5px 20px 5px 15px;
+  cursor: default;
+
+  .btn-label {
+    @include font-medium-12;
+    color: #979797;
+  }
+
+  .btn-icon {
+    animation: btn-spin 1s linear infinite;
+  }
+}
+
+@keyframes btn-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .btn-icon {
   width: 13px;
   height: 13px;

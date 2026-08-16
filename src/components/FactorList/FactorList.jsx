@@ -5,7 +5,7 @@ function FactorList({ title, subtitle, items, variant, className = '' }) {
     <div className={`factor-list factor-list-${variant} ${className}`.trim()}>
       <div className="factor-list-header">
         <p className="factor-list-title">{title}</p>
-        <p className="factor-list-subtitle">{subtitle}</p>
+        {subtitle && <p className="factor-list-subtitle">{subtitle}</p>}
       </div>
       <ul className="factor-list-items">
         {items.map((item) => (

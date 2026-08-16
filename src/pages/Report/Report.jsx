@@ -1,17 +1,23 @@
 import { useState } from 'react'
-import Dropdown from '../../components/Dropdown/Dropdown.jsx'
+import { useNavigate } from 'react-router-dom'
+import PeriodSelector from '../../components/PeriodSelector/PeriodSelector.jsx'
 import LineChart from '../../components/LineChart/LineChart.jsx'
 import FactorList from '../../components/FactorList/FactorList.jsx'
 import TipItem from '../../components/TipItem/TipItem.jsx'
+import SafetyNotice from '../../components/SafetyNotice/SafetyNotice.jsx'
 import shareIcon from '../../assets/Report/img/share-icon.svg'
-import warningIcon from '../../assets/Report/img/warning-icon.svg'
 import aiInsightIcon from '../../assets/Report/img/ai-insight-icon.svg'
 import { reportMockData } from './mock/reportData.js'
 import '../../assets/Report/scss/Report.scss'
 
 function Report() {
-  const { periodOptions, chart, aiInsight, triggerFactors, reliefFactors, tips } = reportMockData
+  const { periodOptions } = reportMockData
   const [selectedPeriodId, setSelectedPeriodId] = useState(reportMockData.selectedPeriodId)
+  const navigate = useNavigate()
+
+  // TODO: API 연동 후 selectedPeriodId(또는 사용자 지정 날짜범위) 기준으로 서버에서 조회하도록 교체
+  const periodData = reportMockData.periods[selectedPeriodId] ?? reportMockData.periods[reportMockData.selectedPeriodId]
+  const { chart, aiInsight, triggerFactors, reliefFactors, tips } = periodData
 
   const handleShare = () => {
     // TODO: 리포트 공유 기능 연동
@@ -26,7 +32,7 @@ function Report() {
         </button>
       </div>
 
-      <Dropdown
+      <PeriodSelector
         className="report-period"
         options={periodOptions}
         value={selectedPeriodId}
@@ -49,21 +55,33 @@ function Report() {
         </div>
       </div>
 
-      <FactorList
-        className="report-card"
-        variant="trigger"
-        title={triggerFactors.title}
-        subtitle={triggerFactors.subtitle}
-        items={triggerFactors.items}
-      />
+      <button
+        type="button"
+        className="report-factor-card-btn"
+        onClick={() => navigate('/report/triggers', { state: { periodId: selectedPeriodId } })}
+      >
+        <FactorList
+          className="report-card"
+          variant="trigger"
+          title={triggerFactors.title}
+          subtitle={triggerFactors.subtitle}
+          items={triggerFactors.items}
+        />
+      </button>
 
-      <FactorList
-        className="report-card"
-        variant="relief"
-        title={reliefFactors.title}
-        subtitle={reliefFactors.subtitle}
-        items={reliefFactors.items}
-      />
+      <button
+        type="button"
+        className="report-factor-card-btn"
+        onClick={() => navigate('/report/relief', { state: { periodId: selectedPeriodId } })}
+      >
+        <FactorList
+          className="report-card"
+          variant="relief"
+          title={reliefFactors.title}
+          subtitle={reliefFactors.subtitle}
+          items={reliefFactors.items}
+        />
+      </button>
 
       <div className="report-tip-card">
         <p className="report-tip-title">다온님을 위한 입덧 관리 TIP!</p>
@@ -74,16 +92,7 @@ function Report() {
         </ul>
       </div>
 
-      <div className="report-safety-notice">
-        <div className="report-safety-notice-header">
-          <img src={warningIcon} alt="" />
-          <span>의료 안전 안내</span>
-        </div>
-        <p className="report-safety-notice-text">
-          반복적인 구토, 수분 섭취 불가, 극심한 어지러움이 지속되는 경우에는 즉시 의료기관에 상담하세요. 이
-          리포트는 진단·처방을 대체하지 않습니다.
-        </p>
-      </div>
+      <SafetyNotice />
     </div>
   )
 }

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import TrackerRecordCard from '../../components/TrackerRecordCard/TrackerRecordCard.jsx';
+import { formatDateKey, useRecords } from '../../context/records-context.js';
 import '../../assets/tracker/scss/tracker_main.scss';
 
 //이미지
@@ -8,7 +10,6 @@ import arrowRightIcon from '../../assets/tracker/img/tracker_right.svg';
 import goodIcon from '../../assets/tracker/img/tracker_good.svg';
 import sosoIcon from '../../assets/tracker/img/tracker_soso.svg';
 import badIcon from '../../assets/tracker/img/tracker_bad.svg';
-import cardArrow from '../../assets/tracker/img/tracker_card_arrow.svg';
 
 function Tracker_main() {
   // 1. 상태값 정의
@@ -102,43 +103,12 @@ function Tracker_main() {
 
 
 
-  // 하단 기록 리스트 더미 데이터 (백엔드 연동)
-  const mockRecords = [
-    {
-      id: 1,
-      timeCategory: '오전',
-      emotion: 'good',
-      title: '울렁거릴 때 레몬사탕을 먹고 속이 조금 편해짐',
-      triggerType: 'X',
-      symptom: '입덧완화',
-      intensity: 0,
-    },
-    {
-      id: 2,
-      timeCategory: '오전',
-      emotion: 'bad',
-      title: '계란비린내로 인한 심한 메스꺼움/식사 중단',
-      triggerType: '음식냄새',
-      symptom: '메스꺼움',
-      intensity: 4,
-    },
-    {
-      id: 3,
-      timeCategory: '새벽',
-      emotion: 'soso',
-      title: '아무것도 먹지 않은 공복상태로 속이 울렁거림',
-      triggerType: '환경',
-      symptom: '울렁거림',
-      intensity: 3,
-    },
-  ];
-
-  // 카드 클릭 시 상세 페이지로 이동 (id 전달)
+  // 홈에서 저장한 기록과 같은 저장소(RecordsContext)를 공유 — 선택한 날짜에 해당하는 것만 필터링
+  const { todayRecords } = useRecords();
+  const selectedDateKey = formatDateKey(year, month, selectedDay);
+  const recordsForSelectedDay = todayRecords.filter((record) => record.date === selectedDateKey);
 
   const navigate = useNavigate();
-  const handleCardClick = (id) => {
-    navigate(`/tracker/detail/${id}`); // 상세 페이지 라우트에 맞게 지정
-  };
 
   const handleThisWeek = (id) => {
     navigate(`/tracker/week`); 
@@ -218,33 +188,15 @@ function Tracker_main() {
         </h4>
 
         {/* 기록 카드 리스트 */}
-        <div className="record_card_list">
-          {mockRecords.map((item) => (
-            <div
-              key={item.id}
-              className="tracker_record_card"
-            >
-              {/* 상단 뱃지 영역 */}
-              <div className="tracker_card_header">
-                <div className="trakcer_badge_group">
-                  <span className="tracker_time_badge">{item.timeCategory}</span>
-                  <div className="emotion_badge">
-                    {getEmotionImg(item.emotion)}
-                  </div>
-                </div>
-                <img src={cardArrow} className="tracker_card_arrow" onClick={() => handleCardClick(item.id)} />
-              </div>
-
-              {/* 본문 제목 */}
-              <p className="tracker_card_title">{item.title}</p>
-
-              {/* 하단 요약 정보 */}
-              <p className="tracker_card_info">
-                유발유형: {item.triggerType}/ 증상: {item.symptom}/ 강도: {item.intensity}
-              </p>
-            </div>
-          ))}
-        </div>
+        {recordsForSelectedDay.length === 0 ? (
+          <p className="record_empty_text">이 날짜에는 기록이 없어요</p>
+        ) : (
+          <div className="record_card_list">
+            {recordsForSelectedDay.map((item) => (
+              <TrackerRecordCard key={item.id} record={item} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
