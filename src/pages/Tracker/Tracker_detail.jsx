@@ -14,7 +14,7 @@ function TrackerDetail() {
 
   // 2. 상세 데이터 상태
   const [detailData, setDetailData] = useState({
-    date: '2026.08.10',
+    date: '2026.08.16',
     timeRange: '저녁 | 18:00~00:00',
     intensity: '4(심함)',
     triggers: ['김치'],
@@ -58,12 +58,35 @@ function TrackerDetail() {
     }));
   };
 
-  // 5. 완료(저장) 버튼 클릭 시
-  const handleSave = () => {
-    setIsEditing(false);
-    // [나중에 백엔드 API 연동 자리]: axios.put(`/api/tracker/${id}`, detailData)
+
+
+  // 3일 이내인지 확인하는 헬퍼 함수
+  const canEdit = isEditableWithin3Days(detailData.date);
+
+  function isEditableWithin3Days(recordDateStr) {
+    if (!recordDateStr) return false;
+    const recordDate = new Date(recordDateStr.replace(/\./g, '-'));
+    const today = new Date();
+    recordDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+
+    const diffTime = today.getTime() - recordDate.getTime();
+    const diffDays = diffTime / (1000 * 60 * 60 * 24);
+    return diffDays <= 3;
+  }
+
+  const handleEdit = () => {
+    navigate(`/tracker/edit/${id}`);
   };
 
+  // 삭제하기 핸들러
+  const handleDelete = () => {
+    if (window.confirm('기록을 삭제하시겠습니까?')) {
+      // axios.delete(`/api/tracker/${id}`)
+      alert('삭제되었습니다.');
+      navigate('/tracker');
+    }
+  };
   return (
     <div className="tracker_detail_wrap">
       {/* 상단 뒤로가기 헤더 */}
@@ -75,7 +98,7 @@ function TrackerDetail() {
           onClick={() => navigate(-1)}
         />
         <h2 className="tracker_detail_title">
-            입덧기록 상세
+          입덧기록 상세
         </h2>
       </header>
 
@@ -230,9 +253,8 @@ function TrackerDetail() {
               />
             ) : (
               <span
-                className={`tracker_value ${
-                  detailData.analysis.reliefFactor === '발견되지 않음' ? 'relief_gray' : ''
-                }`}
+                className={`tracker_value ${detailData.analysis.reliefFactor === '발견되지 않음' ? 'relief_gray' : ''
+                  }`}
               >
                 {detailData.analysis.reliefFactor}
               </span>
@@ -268,21 +290,27 @@ function TrackerDetail() {
           </div>
         </section>
 
-        {/* 하단 수정하기 / 저장 버튼 */}
-        <div className="tracker_button_container">
-          {isEditing ? (
-            <button type="button" className="tracker_save_button" onClick={handleSave}>
-              수정완료
-            </button>
-          ) : (
+        {/* 하단 버튼 영역 (조건부 렌더링) */}
+        <div className="tracker_detail_btn_group">
+          {/* 3일 이내일 때만 수정하기 버튼 렌더링 */}
+          {canEdit && (
             <button
               type="button"
-              className="tracker_edit_button"
-              onClick={() => setIsEditing(true)}
+              className="tracker_btn_edit"
+              onClick={handleEdit}
             >
               수정하기
             </button>
           )}
+
+          {/* 삭제 버튼은 항상 표시 */}
+          <button
+            type="button"
+            className="tracker_btn_delete"
+            onClick={handleDelete}
+          >
+            삭제
+          </button>
         </div>
       </main>
     </div>
