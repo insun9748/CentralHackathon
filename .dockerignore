@@ -1,0 +1,5 @@
+build/
+.gradle/
+uploads/
+local.properties
+*.log
