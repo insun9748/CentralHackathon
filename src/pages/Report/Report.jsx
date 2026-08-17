@@ -25,6 +25,7 @@ function Report() {
 
   return (
     <div className="report-wrap">
+      <div className="report-nav"></div>
       <div className="report-header">
         <p className="report-title">리포트</p>
         <button type="button" className="report-share-btn" onClick={handleShare} aria-label="리포트 공유">

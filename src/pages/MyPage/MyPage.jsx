@@ -38,6 +38,7 @@ function MyPage() {
 
     return (
         <div className='mypage_wrap'>
+            <div className="mypage_nav"></div>
             <div className="mypage_info">
                 <img src={defaultProfileImg} alt="" />
                 <section>

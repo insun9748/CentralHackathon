@@ -117,6 +117,7 @@ function Home() {
 
   return (
     <div className="home-wrap">
+      <div className="home-nav"></div>
       <div className="home-hero">
         <div className="home-greeting">
           <p className="home-greeting-name">{user.name},</p>
