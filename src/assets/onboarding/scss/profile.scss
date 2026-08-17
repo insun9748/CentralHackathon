@@ -12,7 +12,8 @@
             font-weight: $medium;
         }
 
-        .profile_circle {
+        .profile_circle,
+        .profile_preview_img {
             width: 160px;
             height: 160px;
             border-radius: 50%;
@@ -21,10 +22,14 @@
             align-items: center;
             justify-content: center;
             margin: 15px 0 20px 0;
+            cursor: pointer;
             .profile_camera{
                 width: 45px;
                 height: 45px;
             }
+        }
+        .profile_preview_img{
+            object-fit: cover;
         }
 
         .profile_detail {

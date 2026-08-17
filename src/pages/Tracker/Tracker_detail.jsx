@@ -1,27 +1,47 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import EmojiScale from '../../components/EmojiScale/EmojiScale.jsx'; // 이모지 스케일 컴포넌트 임포트 경로 확인
 import '../../assets/tracker/scss/tracker_detail.scss';
 
 // 뒤로가기 아이콘 import
 import arrowLeftIcon from '../../assets/tracker/img/tracker_left.svg';
 
-// 카드에서 전달받은 기록이 없을 때 보여줄 기본값 (더미)
+// 카드에서 전달받은 기록이 없을 때 보여줄 기본값
 const defaultDetailData = {
   date: '2026.08.16',
-  timeRange: '저녁 | 18:00~00:00',
-  intensity: '4(심함)',
-  triggers: ['김치'],
-  type: '음식',
+  timeRange: '오전 | 06:00~12:00',
+  timeSlotKey: '오전',
+  intensity: 4,
+  triggers: ['계란비린내', '계란'],
+  type: '음식냄새',
   originalText:
-    '저녁을 먹으면서 김치를 같이 먹었는데 김치 냄새와 맛 때문인지 속이 갑자기 미식거렸다. 계속 속이 불편해서 저녁을 제대로 먹지 못해서 힘들었다.',
+    '오전에 일어나서부터 속이 메스꺼웠는데 아침에 계란볶음밥을 해먹었더니 계란 비린내가 역해서 토할 것 같은 기분이 들었다. 속이 울렁거려서 다 먹지 못하고 남겼다.',
   analysis: {
-    cause: '김치',
-    symptomSummary: '미식거림',
-    nauseaType: '음식',
+    cause: '계란볶음밥 -> 계란 비린내',
+    symptomSummary: '메스꺼움, 구역질',
+    nauseaType: '음식 냄새',
     reliefFactor: '발견되지 않음',
-    situation: '저녁 식사 중',
-    condition: '속이 불편해 식사 어려움',
+    situation: '아침 식사 중',
+    condition: '구역감, 기분저하',
   },
+};
+
+// 시간대 매핑 테이블
+const TIME_SLOTS = [
+  { label: '새벽', fullText: '새벽 | 00:00~06:00' },
+  { label: '오전', fullText: '오전 | 06:00~12:00' },
+  { label: '오후', fullText: '오후 | 12:00~18:00' },
+  { label: '저녁', fullText: '저녁 | 18:00~24:00' },
+];
+
+// 입덧강도 텍스트 라벨 매핑 (0~5)
+const INTENSITY_LABELS = {
+  0: '0 | 없음',
+  1: '1 | 약함',
+  2: '2 | 보통',
+  3: '3 | 약간심함',
+  4: '4 | 심함',
+  5: '5 | 매우심함',
 };
 
 function TrackerDetail() {
@@ -29,12 +49,15 @@ function TrackerDetail() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 1. 수정 모드 여부 상태 (true: 수정 중, false: 조회 중)
+  // 1. 상태 관리
   const [isEditing, setIsEditing] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // 2. 상세 데이터 상태
-  // 기록 카드에서 넘어온 경우(location.state) 실제 입력한 원문/분석 결과를 그대로 보여주고,
-  // 없으면(직접 URL 접근 등) 더미 데이터로 대체
+  // 모달 내부 임시 선택 상태
+  const [tempTimeSlot, setTempTimeSlot] = useState('오전');
+  const [tempIntensity, setTempIntensity] = useState(4);
+
+  // 상세 데이터 상태
   const [detailData, setDetailData] = useState(() => {
     const passedRecord = location.state;
     if (!passedRecord) return defaultDetailData;
@@ -42,8 +65,7 @@ function TrackerDetail() {
     return {
       ...defaultDetailData,
       timeRange: passedRecord.timeCategory ?? defaultDetailData.timeRange,
-      intensity:
-        passedRecord.intensity !== undefined ? `${passedRecord.intensity}` : defaultDetailData.intensity,
+      intensity: passedRecord.intensity !== undefined ? Number(passedRecord.intensity) : defaultDetailData.intensity,
       triggers: passedRecord.triggerType ? [passedRecord.triggerType] : defaultDetailData.triggers,
       type: passedRecord.analysis?.nauseaType ?? defaultDetailData.type,
       originalText: passedRecord.originalText ?? defaultDetailData.originalText,
@@ -51,36 +73,7 @@ function TrackerDetail() {
     };
   });
 
-  // 3. 입력값 변경 핸들러
-  const handleInputChange = (field, value) => {
-    setDetailData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-
-  const handleAnalysisChange = (field, value) => {
-    setDetailData((prev) => ({
-      ...prev,
-      analysis: {
-        ...prev.analysis,
-        [field]: value,
-      },
-    }));
-  };
-
-  // 4. 유발원인(태그) 문자열 수정용 (쉼표로 구분)
-  const handleTriggerChange = (e) => {
-    const tagArray = e.target.value.split(',').map((t) => t.trim());
-    setDetailData((prev) => ({
-      ...prev,
-      triggers: tagArray,
-    }));
-  };
-
-
-
-  // 3일 이내인지 확인하는 헬퍼 함수
+  // 3일 이내인지 확인
   const canEdit = isEditableWithin3Days(detailData.date);
 
   function isEditableWithin3Days(recordDateStr) {
@@ -95,21 +88,66 @@ function TrackerDetail() {
     return diffDays <= 3;
   }
 
-  const handleEdit = () => {
-    navigate(`/tracker/edit/${id}`);
+  // 인풋 값 변경
+  const handleInputChange = (field, value) => {
+    setDetailData((prev) => ({ ...prev, [field]: value }));
   };
 
-  // 삭제하기 핸들러
-  const handleDelete = () => {
-    if (window.confirm('기록을 삭제하시겠습니까?')) {
-      // axios.delete(`/api/tracker/${id}`)
-      alert('삭제되었습니다.');
-      navigate('/tracker');
+  const handleAnalysisChange = (field, value) => {
+    setDetailData((prev) => ({
+      ...prev,
+      analysis: { ...prev.analysis, [field]: value },
+    }));
+  };
+
+  const handleTriggerChange = (e) => {
+    const tagArray = e.target.value.split(',').map((t) => t.trim());
+    setDetailData((prev) => ({ ...prev, triggers: tagArray }));
+  };
+
+  // 모달 열기 핸들러 (수정 모드일 때만 동작)
+  const handleOpenModal = () => {
+    if (!isEditing) return;
+    setTempTimeSlot(detailData.timeSlotKey || '오전');
+    setTempIntensity(detailData.intensity ?? 4);
+    setIsModalOpen(true);
+  };
+
+  // 모달 선택 완료 핸들러
+  const handleConfirmModal = () => {
+    const selectedSlot = TIME_SLOTS.find((s) => s.label === tempTimeSlot);
+
+    setDetailData((prev) => ({
+      ...prev,
+      timeSlotKey: tempTimeSlot,
+      timeRange: selectedSlot ? selectedSlot.fullText : prev.timeRange,
+      intensity: tempIntensity,
+    }));
+    setIsModalOpen(false);
+  };
+
+  // 수정하기 / 수정 완료 토글
+  const handleToggleEdit = () => {
+    if (isEditing) {
+      // TODO: 백엔드 PATCH /records/{id} API 연동
+      alert('수정이 완료되었습니다.');
+      setIsEditing(false);
+    } else {
+      setIsEditing(true);
     }
   };
+
+  // 삭제 핸들러
+  const handleDelete = () => {
+    if (window.confirm('기록을 삭제하시겠습니까?')) {
+      alert('삭제되었습니다.');
+      navigate(-1);
+    }
+  };
+
   return (
     <div className="tracker_detail_wrap">
-      {/* 상단 뒤로가기 헤더 */}
+      {/* 상단 헤더 */}
       <header className="tracker_detail_header">
         <img
           src={arrowLeftIcon}
@@ -117,9 +155,7 @@ function TrackerDetail() {
           className="tracker_detail_back_btn"
           onClick={() => navigate(-1)}
         />
-        <h2 className="tracker_detail_title">
-          입덧기록 상세
-        </h2>
+        <h2 className="tracker_detail_title">입덧기록 상세</h2>
       </header>
 
       <main className="tracker_detail_body">
@@ -127,46 +163,32 @@ function TrackerDetail() {
         <section className="tracker_detail_card info_card">
           <div className="tracker_row">
             <span className="tracker_label">일자</span>
-            {isEditing ? (
-              <input
-                type="text"
-                className="tracker_edit_input"
-                value={detailData.date}
-                onChange={(e) => handleInputChange('date', e.target.value)}
-              />
-            ) : (
-              <span className="tracker_value">{detailData.date}</span>
-            )}
+            <span className="tracker_value bold">{detailData.date}</span>
           </div>
 
-          <div className="tracker_row">
+          {/* 시간대 (수정 모드일 때 클릭 가능) */}
+          <div
+            className={`tracker_row ${isEditing ? 'clickable_row' : ''}`}
+            onClick={handleOpenModal}
+          >
             <span className="tracker_label">시간대</span>
-            {isEditing ? (
-              <input
-                type="text"
-                className="tracker_edit_input"
-                value={detailData.timeRange}
-                onChange={(e) => handleInputChange('timeRange', e.target.value)}
-              />
-            ) : (
-              <span className="tracker_value">{detailData.timeRange}</span>
-            )}
+            <span className={`tracker_value ${isEditing ? 'edit_highlight' : ''}`}>
+              {detailData.timeRange} 
+            </span>
           </div>
 
-          <div className="tracker_row">
+          {/* 입덧강도 (수정 모드일 때 클릭 가능) */}
+          <div
+            className={`tracker_row ${isEditing ? 'clickable_row' : ''}`}
+            onClick={handleOpenModal}
+          >
             <span className="tracker_label">입덧강도</span>
-            {isEditing ? (
-              <input
-                type="text"
-                className="tracker_edit_input"
-                value={detailData.intensity}
-                onChange={(e) => handleInputChange('intensity', e.target.value)}
-              />
-            ) : (
-              <span className="tracker_value">{detailData.intensity}</span>
-            )}
+            <span className={`tracker_value ${isEditing ? 'edit_highlight' : ''}`}>
+              {INTENSITY_LABELS[detailData.intensity] ?? `${detailData.intensity} | 심함`}{' '}
+            </span>
           </div>
 
+          {/* 유발원인 */}
           <div className="tracker_row">
             <span className="tracker_label">유발원인</span>
             {isEditing ? (
@@ -188,6 +210,7 @@ function TrackerDetail() {
             )}
           </div>
 
+          {/* 입덧유형 */}
           <div className="tracker_row">
             <span className="tracker_label">입덧유형</span>
             {isEditing ? (
@@ -273,8 +296,9 @@ function TrackerDetail() {
               />
             ) : (
               <span
-                className={`tracker_value ${detailData.analysis.reliefFactor === '발견되지 않음' ? 'relief_gray' : ''
-                  }`}
+                className={`tracker_value ${
+                  detailData.analysis.reliefFactor === '발견되지 않음' ? 'relief_gray' : ''
+                }`}
               >
                 {detailData.analysis.reliefFactor}
               </span>
@@ -310,20 +334,18 @@ function TrackerDetail() {
           </div>
         </section>
 
-        {/* 하단 버튼 영역 (조건부 렌더링) */}
+        {/* 하단 버튼 영역 */}
         <div className="tracker_detail_btn_group">
-          {/* 3일 이내일 때만 수정하기 버튼 렌더링 */}
           {canEdit && (
             <button
               type="button"
-              className="tracker_btn_edit"
-              onClick={handleEdit}
+              className={`tracker_btn_edit ${isEditing ? 'active_save' : ''}`}
+              onClick={handleToggleEdit}
             >
-              수정하기
+              {isEditing ? '수정 완료' : '수정하기'}
             </button>
           )}
 
-          {/* 삭제 버튼은 항상 표시 */}
           <button
             type="button"
             className="tracker_btn_delete"
@@ -333,6 +355,47 @@ function TrackerDetail() {
           </button>
         </div>
       </main>
+
+      {/* 4. 시간대 / 입덧강도 선택 팝업 모달 */}
+      {isModalOpen && (
+        <div className="tracker_modal_backdrop" onClick={() => setIsModalOpen(false)}>
+          <div className="tracker_select_modal_card" onClick={(e) => e.stopPropagation()}>
+            {/* 시간대 선택 */}
+            <h4 className="tracker_modal_section_title">시간대</h4>
+            <div className="tracker_modal_time_chips">
+              {TIME_SLOTS.map((slot) => (
+                <button
+                  key={slot.label}
+                  type="button"
+                  className={`tracker_modal_chip ${tempTimeSlot === slot.label ? 'active' : ''}`}
+                  onClick={() => setTempTimeSlot(slot.label)}
+                >
+                  {slot.label}
+                </button>
+              ))}
+            </div>
+
+            {/* 입덧강도 선택 (EmojiScale 컴포넌트 사용) */}
+            <h4 className="tracker_modal_section_title">입덧강도</h4>
+            <div className="tracker_modal_emoji_scale_wrapper">
+              <EmojiScale
+                levels={[0, 1, 2, 3, 4, 5]}
+                value={tempIntensity}
+                onChange={(newLevel) => setTempIntensity(newLevel)}
+              />
+            </div>
+
+            {/* 선택완료 버튼 */}
+            <button
+              type="button"
+              className="tracker_modal_confirm_btn"
+              onClick={handleConfirmModal}
+            >
+              선택완료
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -206,4 +206,115 @@
             }
         }
     }
+
+    /* 팝업 모달 */
+    .tracker_modal_backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        /* 하단바와 모든 요소 위로 띄움 */
+
+        .tracker_select_modal_card {
+            width: 300px;
+            height: 324px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            padding: 35px 30px 39px 30px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid $main;
+            animation: modalFadeIn 0.2s ease-out;
+
+            .tracker_modal_section_title {
+                font-size: 12px;
+                font-weight: $medium;
+                color: $text;
+                margin: 0;
+                text-align: center;
+                margin-bottom: 18px;
+            }
+
+            /* 시간대 선택 칩 */
+            .tracker_modal_time_chips {
+                display: flex;
+                gap: 15px;
+                margin-bottom: 40px;
+
+                .tracker_modal_chip {
+                    padding: 4px 15px;
+                    border-radius: 15px;
+                    border: 1px solid $main;
+                    background-color: #ffffff;
+                    color: $text;
+                    font-size: 10px;
+                    font-weight: $medium;
+                    cursor: pointer;
+                    outline: none;
+                    transition: all 0.2s ease;
+
+                    &.active {
+                        background-color: $main;
+                        color: $text;
+                    }
+                }
+            }
+
+            /* 입덧강도 선택 영역 */
+            .tracker_modal_emoji_scale_wrapper {
+                width: 254px;
+                overflow: visible;
+                display: flex;
+                justify-content: center;
+                margin-bottom: 18px;
+
+                .emoji-scale {
+                    display: flex;
+                    gap: 10px;
+                    justify-content: space-between;
+                    transform: scale(0.78);
+                    transform-origin: center center;
+                }
+
+            }
+
+            /* 선택완료 버튼 */
+            .tracker_modal_confirm_btn {
+                padding: 5px 20px;
+                background-color: $main;
+                border: none;
+                border-radius: 15px;
+                color: $text;
+                font-size: 12px;
+                font-weight: $medium;
+                cursor: pointer;
+                box-shadow: 0 0px 4px #6D9883;
+                transition: background-color 0.2s;
+
+
+            }
+        }
+    }
+
+    @keyframes modalFadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
 }
