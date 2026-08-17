@@ -14,7 +14,7 @@ function formatDate(date) {
   return `${y}.${m}.${d}`
 }
 
-function PeriodSelector({ options, value, onChange, className = '' }) {
+function PeriodSelector({ options, value, onChange, onCustomRangeChange, className = '' }) {
   const [calendarOpen, setCalendarOpen] = useState(false)
   const [customRange, setCustomRange] = useState({ start: null, end: null })
 
@@ -36,7 +36,11 @@ function PeriodSelector({ options, value, onChange, className = '' }) {
   }
 
   const handleConfirm = () => {
-    setCustomRange((prev) => (prev.start ? { start: prev.start, end: prev.end ?? prev.start } : prev))
+    setCustomRange((prev) => {
+      const next = prev.start ? { start: prev.start, end: prev.end ?? prev.start } : prev
+      if (next.start) onCustomRangeChange?.(next)
+      return next
+    })
     setCalendarOpen(false)
   }
 

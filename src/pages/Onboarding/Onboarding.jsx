@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../assets/onboarding/scss/onboarding.scss';
 import img from '../../assets/onboarding/img/onboarding.svg';

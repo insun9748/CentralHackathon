@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { RecordsProvider } from './context/RecordsContext.jsx'
+import RequireAuth from './components/RequireAuth/RequireAuth.jsx'
 import Layout from './components/Layout/Layout.jsx'
 import Onboarding from './pages/Onboarding/Onboarding.jsx'
 import Login from './pages/Onboarding/Login.jsx'
@@ -29,24 +30,26 @@ function App() {
           <Route path="/info" element={<Info />} />
           <Route path="/signup" element={<Signup />} />
 
-          <Route element={<Layout />}>
-            <Route path="/home" element={<Home />} />
-            <Route path="/report" element={<Report />} />
-            <Route path="/report/triggers" element={<ReportTriggers />} />
-            <Route path="/report/relief" element={<ReportRelief />} />
-          </Route>
+          <Route element={<RequireAuth />}>
+            <Route element={<Layout />}>
+              <Route path="/home" element={<Home />} />
+              <Route path="/report" element={<Report />} />
+              <Route path="/report/triggers" element={<ReportTriggers />} />
+              <Route path="/report/relief" element={<ReportRelief />} />
+            </Route>
 
-          <Route element={<Layout />}>
-            <Route path="/tracker" element={<TrackerMain />} />
-            <Route path="/tracker/detail/:id" element={<TrackerDetail />} />
-            <Route path="/tracker/week" element={<TrackerWeek />} />
-          </Route>
+            <Route element={<Layout />}>
+              <Route path="/tracker" element={<TrackerMain />} />
+              <Route path="/tracker/detail/:id" element={<TrackerDetail />} />
+              <Route path="/tracker/week" element={<TrackerWeek />} />
+            </Route>
 
-          <Route element={<Layout />}>
-            <Route path="/mypage" element={<MyPage />} />
-            <Route path="/mypage/notification" element={<MyPage_notification />} />
-            <Route path="/mypage/authority" element={<MyPage_authority />} />
-            <Route path="/mypage/edit" element={<MyPage_edit />} />
+            <Route element={<Layout />}>
+              <Route path="/mypage" element={<MyPage />} />
+              <Route path="/mypage/notification" element={<MyPage_notification />} />
+              <Route path="/mypage/authority" element={<MyPage_authority />} />
+              <Route path="/mypage/edit" element={<MyPage_edit />} />
+            </Route>
           </Route>
 
         </Routes>

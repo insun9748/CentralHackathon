@@ -1,16 +1,50 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../assets/MyPage/scss/mypage_notification.scss';
 import time from '../../assets/MyPage/img/time.svg';
 import report from '../../assets/MyPage/img/report.svg';
 import arrowLeftIcon from '../../assets/tracker/img/tracker_left.svg';
+import { getSettings, updateSettings } from '../../api/user.js';
+import { getErrorMessage } from '../../api/client.js';
 
 
 function MyPage_notification() {
     const navigate = useNavigate();
 
-    const [privacyAgreed, setPrivacyAgreed] = useState(true);
-    const [termsAgreed, setTermsAgreed] = useState(true);
+    const [settings, setSettings] = useState({
+        recordNotification: true,
+        reportNotification: true,
+        microphone: true,
+    });
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        let cancelled = false;
+        getSettings()
+            .then((data) => {
+                if (!cancelled) setSettings(data);
+            })
+            .catch((err) => {
+                alert(getErrorMessage(err, '설정을 불러오지 못했습니다.'));
+            })
+            .finally(() => {
+                if (!cancelled) setLoading(false);
+            });
+        return () => {
+            cancelled = true;
+        };
+    }, []);
+
+    const handleToggle = async (field, value) => {
+        const next = { ...settings, [field]: value };
+        setSettings(next);
+        try {
+            await updateSettings(next);
+        } catch (err) {
+            setSettings(settings);
+            alert(getErrorMessage(err, '설정 변경에 실패했습니다.'));
+        }
+    };
 
     return (
         <div className='mypage_notification_wrap'>
@@ -39,8 +73,9 @@ function MyPage_notification() {
                     <label className="nf_toggle_switch">
                         <input
                             type="checkbox"
-                            checked={privacyAgreed}
-                            onChange={(e) => setPrivacyAgreed(e.target.checked)}
+                            checked={settings.recordNotification}
+                            disabled={loading}
+                            onChange={(e) => handleToggle('recordNotification', e.target.checked)}
                         />
                         <span className="nf_slider round" />
                     </label>
@@ -58,8 +93,9 @@ function MyPage_notification() {
                     <label className="nf_toggle_switch">
                         <input
                             type="checkbox"
-                            checked={termsAgreed}
-                            onChange={(e) => setTermsAgreed(e.target.checked)}
+                            checked={settings.reportNotification}
+                            disabled={loading}
+                            onChange={(e) => handleToggle('reportNotification', e.target.checked)}
                         />
                         <span className="nf_slider round" />
                     </label>

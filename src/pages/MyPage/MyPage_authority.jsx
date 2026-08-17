@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../assets/mypage/scss/mypage_authority.scss';
 
@@ -6,41 +6,66 @@ import arrowLeftIcon from '../../assets/tracker/img/tracker_left.svg';
 import micIcon from '../../assets/MyPage/img/mic.svg';
 import privacyIcon from '../../assets/MyPage/img/personal.svg';
 import termsIcon from '../../assets/MyPage/img/service.svg';
+import { getSettings, updateSettings } from '../../api/user.js';
+import { getErrorMessage } from '../../api/client.js';
 
 function MyPage_authority() {
   const navigate = useNavigate();
 
-  // localStorage에서 마이크 권한 상태 가져오기 (기본값 true 또는 false)
-  const [micPermission, setMicPermission] = useState(() => {
-    return localStorage.getItem('mic_permission') !== 'false'; // 기본 허용 상태로 둘 경우
+  const [settings, setSettings] = useState({
+    recordNotification: true,
+    reportNotification: true,
+    microphone: true,
   });
+  const [loading, setLoading] = useState(true);
 
   const [privacyAgreed, setPrivacyAgreed] = useState(true);
   const [termsAgreed, setTermsAgreed] = useState(true);
 
-  // 마이크 권한 토글 핸들러
+  useEffect(() => {
+    let cancelled = false;
+    getSettings()
+      .then((data) => {
+        if (!cancelled) setSettings(data);
+      })
+      .catch((err) => {
+        alert(getErrorMessage(err, '설정을 불러오지 못했습니다.'));
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const updateMicrophoneSetting = async (value) => {
+    const next = { ...settings, microphone: value };
+    setSettings(next);
+    try {
+      await updateSettings(next);
+    } catch (err) {
+      setSettings(settings);
+      alert(getErrorMessage(err, '설정 변경에 실패했습니다.'));
+    }
+  };
+
+  // 마이크 권한 토글 핸들러 (브라우저 권한 요청 + 서버 설정 동기화)
   const handleMicToggle = async () => {
-    if (!micPermission) {
+    if (!settings.microphone) {
       try {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
           const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
           stream.getTracks().forEach((track) => track.stop()); // 테스트용 스트림 즉시 종료
-
-          setMicPermission(true);
-          localStorage.setItem('mic_permission', 'true');
-        } else {
-          setMicPermission(true);
-          localStorage.setItem('mic_permission', 'true');
         }
+        await updateMicrophoneSetting(true);
       } catch (error) {
         console.error('마이크 권한 획득 실패:', error);
         alert('브라우저 설정에서 마이크 접근을 허용해 주세요.');
-        setMicPermission(false);
-        localStorage.setItem('mic_permission', 'false');
+        await updateMicrophoneSetting(false);
       }
     } else {
-      setMicPermission(false);
-      localStorage.setItem('mic_permission', 'false');
+      await updateMicrophoneSetting(false);
     }
   };
 
@@ -66,7 +91,8 @@ function MyPage_authority() {
           <label className="at_toggle_switch">
             <input
               type="checkbox"
-              checked={micPermission}
+              checked={settings.microphone}
+              disabled={loading}
               onChange={handleMicToggle}
             />
             <span className="slider round" />

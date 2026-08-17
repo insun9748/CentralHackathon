@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TrackerRecordCard from '../../components/TrackerRecordCard/TrackerRecordCard.jsx';
-import { formatDateKey, useRecords } from '../../context/records-context.js';
+import { formatDateKey, emotionFromIntensityLevel, useRecords } from '../../context/records-context.js';
+import { getTracker, getCalendar } from '../../api/tracker.js';
+import { getErrorMessage } from '../../api/client.js';
 import '../../assets/tracker/scss/tracker_main.scss';
 
 //이미지
@@ -12,46 +14,41 @@ import sosoIcon from '../../assets/tracker/img/tracker_soso.svg';
 import badIcon from '../../assets/tracker/img/tracker_bad.svg';
 
 function Tracker_main() {
-  // 1. 상태값 정의
-
   // 실제 오늘 날짜 (기준값)
   const realToday = new Date();
 
-  // 2. 기준 연/월의 초기값을 오늘 날짜의 1일로 설정
   const [currentDate, setCurrentDate] = useState(
     new Date(realToday.getFullYear(), realToday.getMonth(), 1)
   );
-
-  // 3. 선택된 일자의 초기값을 오늘의 '일(day)'로 설정
   const [selectedDay, setSelectedDay] = useState(realToday.getDate());
 
-  // 더미 사용자 데이터 (나중에 백엔드 API 연동 자리)
-  const [pregnancyInfo, setPregnancyInfo] = useState({
-    weeks: 9,
-    days: 3,
-  });
+  const [pregnancyInfo, setPregnancyInfo] = useState({ weeks: null, days: null });
+  const [emotionMap, setEmotionMap] = useState({});
 
-  // 날짜별 이모지 더미 데이터 (YYYY-MM-DD 형태 또는 일자 기준)
-  const dummyEmotionMap = {
-    2: 'bad',
-    3: 'bad',
-    4: 'soso',
-    5: 'soso',
-    6: 'bad',
-    7: 'good',
-    8: 'soso',
-    10: 'soso',
-    11: 'bad',
-    12: 'good',
-    13: 'soso',
-    14: 'soso',
-    15: 'bad',
-    16: 'bad',
-    17: 'bad',
-    18: 'soso',
-    19: 'bad',
-    20: 'soso',
-  };
+  useEffect(() => {
+    getTracker()
+      .then((data) => {
+        setPregnancyInfo((prev) => ({ ...prev, weeks: data.currentWeek }));
+      })
+      .catch((err) => console.error(getErrorMessage(err)));
+  }, []);
+
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth(); // 0 ~ 11
+
+  useEffect(() => {
+    getCalendar(year, month + 1)
+      .then((data) => {
+        const map = {};
+        data.days.forEach((day) => {
+          if (!day.hasRecord) return;
+          const dayOfMonth = Number(day.date.slice(8, 10));
+          map[dayOfMonth] = emotionFromIntensityLevel(day.averageIntensity);
+        });
+        setEmotionMap(map);
+      })
+      .catch((err) => console.error(getErrorMessage(err)));
+  }, [year, month]);
 
   // 2. 월 이동 핸들러
   const handlePrevMonth = () => {
@@ -63,9 +60,6 @@ function Tracker_main() {
   };
 
   // 3. 달력 날짜 계산 로직
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth(); // 0 ~ 11
-
   const firstDayIndex = new Date(year, month, 1).getDay();
   const lastDate = new Date(year, month + 1, 0).getDate();
 
@@ -89,19 +83,15 @@ function Tracker_main() {
   };
 
   //현재 날짜로 돌아가는 버튼
-  //월, 일이 모두 오늘과 일치하는지 비교
   const isToday =
     currentDate.getFullYear() === realToday.getFullYear() &&
     currentDate.getMonth() === realToday.getMonth() &&
     selectedDay === realToday.getDate();
 
-  // '오늘' 버튼 클릭 시 현재 연/월/일로 즉시 복귀
   const handleGoToday = () => {
     setCurrentDate(new Date(realToday.getFullYear(), realToday.getMonth(), 1));
     setSelectedDay(realToday.getDate());
   };
-
-
 
   // 홈에서 저장한 기록과 같은 저장소(RecordsContext)를 공유 — 선택한 날짜에 해당하는 것만 필터링
   const { todayRecords } = useRecords();
@@ -110,12 +100,9 @@ function Tracker_main() {
 
   const navigate = useNavigate();
 
-  const handleThisWeek = (id) => {
-    navigate(`/tracker/week`); 
+  const handleThisWeek = () => {
+    navigate(`/tracker/week`);
   };
-
-
-
 
   return (
     <div className="tracker_wrap">
@@ -124,7 +111,7 @@ function Tracker_main() {
       {/* 상단 임신 주차 정보 */}
       <div className="tracker_main_header">
         <h3 className="tracker_main_week">
-          임신 {pregnancyInfo.weeks}주 {pregnancyInfo.days}일차에요
+          {pregnancyInfo.weeks != null ? `임신 ${pregnancyInfo.weeks}주차에요` : '임신 정보를 불러오는 중...'}
         </h3>
         <button type="button" className="tracker_info_link_btn" onClick={handleThisWeek}>
           이번 주 임신 정보 보러가기 <img src={arrowRightIcon} alt="" />
@@ -164,7 +151,7 @@ function Tracker_main() {
                 onClick={() => setSelectedDay(day)}
               >
                 <span className="tracker_day_num">{day}</span>
-                <div className="emotion_wrapper">{getEmotionImg(dummyEmotionMap[day])}</div>
+                <div className="emotion_wrapper">{getEmotionImg(emotionMap[day])}</div>
               </div>
             );
           })}
@@ -203,4 +190,3 @@ function Tracker_main() {
 }
 
 export default Tracker_main
-

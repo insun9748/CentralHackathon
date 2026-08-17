@@ -25,7 +25,7 @@ function TrackerRecordCard({ record }) {
           src={cardArrow}
           className="tracker_card_arrow"
           alt=""
-          onClick={() => navigate(`/tracker/detail/${id}`, { state: record })}
+          onClick={() => navigate(`/tracker/detail/${id}`)}
         />
       </div>
 

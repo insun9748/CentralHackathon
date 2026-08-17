@@ -22,7 +22,6 @@ function VoiceRecorder({ onRecordingComplete, className = '' }) {
       recorder.onstop = () => {
         stream.getTracks().forEach((track) => track.stop())
         const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm' })
-        // TODO: 백엔드 음성 인식 API 연동 후 audioBlob을 api/로 전송
         onRecordingComplete?.(audioBlob)
       }
 

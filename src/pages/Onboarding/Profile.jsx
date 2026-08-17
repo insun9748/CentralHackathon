@@ -33,7 +33,7 @@
 
 // export default Profile
 
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../assets/onboarding/scss/profile.scss';
 import camera from '../../assets/onboarding/img/camera.svg';
@@ -44,6 +44,7 @@ function Profile() {
   // 1. 파일 input 참조용 ref와 프로필 이미지 상태
   const fileInputRef = useRef(null);
   const [profileImage, setProfileImage] = useState(null);
+  const [profileImageFile, setProfileImageFile] = useState(null);
 
   // 2. profile_circle 클릭 시 숨겨진 file input 트리거
   const handleCircleClick = () => {
@@ -52,12 +53,14 @@ function Profile() {
     }
   };
 
-  // 3. 파일 선택 시 이미지 미리보기 URL 생성
+  // 3. 파일 선택 시 이미지 미리보기 URL 생성 (실제 파일은 다음 단계(Info)에서
+  // 닉네임/주차/출산예정일과 함께 한 번에 업로드된다)
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const previewUrl = URL.createObjectURL(file);
       setProfileImage(previewUrl);
+      setProfileImageFile(file);
     }
   };
 
@@ -66,8 +69,7 @@ function Profile() {
   };
 
   const handleComplete = () => {
-    // TODO: 백엔드 이미지 업로드 API 연동 또는 완료 후 이동
-    navigate('/info');
+    navigate('/info', { state: { profileImageFile } });
   };
 
   return (

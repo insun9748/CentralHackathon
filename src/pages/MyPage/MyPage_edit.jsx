@@ -1,37 +1,63 @@
-import React, { useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../assets/MyPage/scss/mypage_edit.scss';
 
 import defaultProfileImg from '../../assets/MyPage/img/mypage.svg';
 import arrowLeftIcon from '../../assets/tracker/img/tracker_left.svg';
 import camera from '../../assets/MyPage/img/camera.svg';
+import { getMe, updateMe } from '../../api/user.js';
+import { resolveMediaUrl, getErrorMessage } from '../../api/client.js';
 
 function MyPage_edit() {
 
     const navigate = useNavigate();
     const fileInputRef = useRef(null);
 
-    // 1. 초기 원본 데이터 (비교용)
-    const initialData = {
+    const [initialData, setInitialData] = useState(null);
+    const [formData, setFormData] = useState({
         profileImage: defaultProfileImg,
-        nickname: '다온',
-        pregnancyWeek: '9주차',
-        dueDate: '20270327',
-    };
+        nickname: '',
+        pregnancyWeek: '',
+        dueDate: '',
+    });
+    const [profileImageFile, setProfileImageFile] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
 
-    // 2. 수정 중인 데이터 상태
-    const [formData, setFormData] = useState(initialData);
+    useEffect(() => {
+        let cancelled = false;
+        getMe()
+            .then((data) => {
+                if (cancelled) return;
+                const loaded = {
+                    profileImage: resolveMediaUrl(data.profileImage) || defaultProfileImg,
+                    nickname: data.nickname,
+                    pregnancyWeek: String(data.pregnancyWeek ?? ''),
+                    dueDate: data.dueDate ?? '',
+                };
+                setInitialData(loaded);
+                setFormData(loaded);
+            })
+            .catch((err) => {
+                alert(getErrorMessage(err, '회원 정보를 불러오지 못했습니다.'));
+            })
+            .finally(() => {
+                if (!cancelled) setLoading(false);
+            });
+        return () => {
+            cancelled = true;
+        };
+    }, []);
 
-    // 3. 사진 변경 핸들러
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
             const imageUrl = URL.createObjectURL(file);
             setFormData((prev) => ({ ...prev, profileImage: imageUrl }));
+            setProfileImageFile(file);
         }
     };
 
-    // 4. 입력 필드 변경 핸들러
     const handleInputChange = (field, value) => {
         setFormData((prev) => ({
             ...prev,
@@ -39,19 +65,47 @@ function MyPage_edit() {
         }));
     };
 
-    // 5. 변경 사항이 있는지 확인 (하나라도 바뀌면 버튼이 민트색으로 활성화)
     const isChanged =
-        formData.profileImage !== initialData.profileImage ||
-        formData.nickname !== initialData.nickname ||
-        formData.pregnancyWeek !== initialData.pregnancyWeek ||
-        formData.dueDate !== initialData.dueDate;
+        Boolean(profileImageFile) ||
+        (initialData &&
+            (formData.nickname !== initialData.nickname ||
+                formData.pregnancyWeek !== initialData.pregnancyWeek ||
+                formData.dueDate !== initialData.dueDate));
 
-    // 6. 저장 완료 핸들러
-    const handleSave = () => {
+    const handleSave = async () => {
         if (!isChanged) return;
 
-        // [백엔드 API 연동 자리]: axios.put('/api/user/profile', formData)
+        const week = Number(formData.pregnancyWeek);
+        if (formData.nickname.trim().length < 1) {
+            alert('닉네임을 입력해 주세요.');
+            return;
+        }
+        if (!week || week < 1 || week > 40) {
+            alert('임신 주차는 1~40 사이로 입력해 주세요.');
+            return;
+        }
+        if (!formData.dueDate) {
+            alert('출산 예정일을 입력해 주세요.');
+            return;
+        }
+
+        setSaving(true);
+        try {
+            await updateMe(
+                { nickname: formData.nickname, pregnancyWeek: week, dueDate: formData.dueDate },
+                profileImageFile
+            );
+            navigate('/mypage');
+        } catch (err) {
+            alert(getErrorMessage(err, '정보 수정에 실패했습니다.'));
+        } finally {
+            setSaving(false);
+        }
     };
+
+    if (loading) {
+        return <div className='mypage_edit_wrap' />;
+    }
 
     return (
         <div className='mypage_edit_wrap'>
@@ -113,22 +167,23 @@ function MyPage_edit() {
                     <div className="pf_form_item">
                         <label className="pf_form_label">임신 주차</label>
                         <input
-                            type="text"
+                            type="number"
                             className="pf_form_input"
+                            min={1}
+                            max={40}
                             value={formData.pregnancyWeek}
                             onChange={(e) => handleInputChange('pregnancyWeek', e.target.value)}
-                            placeholder="예: 9주차"
+                            placeholder="예: 9"
                         />
                     </div>
 
                     <div className="pf_form_item">
                         <label className="pf_form_label">출산예정일</label>
                         <input
-                            type="text"
+                            type="date"
                             className="pf_form_input"
                             value={formData.dueDate}
                             onChange={(e) => handleInputChange('dueDate', e.target.value)}
-                            placeholder="YYYYMMDD"
                         />
                     </div>
                 </div>
@@ -139,9 +194,9 @@ function MyPage_edit() {
                         type="button"
                         className={`save_submit_btn ${isChanged ? 'active' : ''}`}
                         onClick={handleSave}
-                        disabled={!isChanged}
+                        disabled={!isChanged || saving}
                     >
-                        저장하기
+                        {saving ? '저장 중...' : '저장하기'}
                     </button>
                 </div>
             </main>

@@ -1,69 +1,105 @@
-import { useEffect, useState } from 'react'
-import { RecordsContext, todayDateKey } from './records-context.js'
+import { useCallback, useEffect, useState } from 'react'
+import { RecordsContext, emotionFromIntensityLevel } from './records-context.js'
+import { getRecords, createRecord, updateRecord as updateRecordApi, deleteRecord as deleteRecordApi } from '../api/record.js'
+import { analyzeRecord } from '../api/ai.js'
+import { isLoggedIn } from '../api/tokenStorage.js'
 
-const STORAGE_KEY = 'deotlog:todayRecords'
-
-// 트래커 페이지가 예전에 자체적으로 갖고 있던 데모 기록 — 저장된 기록이 하나도 없을 때만
-// 기본값으로 보여줘서, 홈/트래커가 같은 기록 저장소를 보고 있다는 걸 알 수 있게 함
-function createSeedRecords() {
-  const date = todayDateKey()
-  return [
-    {
-      id: 1,
-      date,
-      timeCategory: '오전',
-      emotion: 'good',
-      title: '울렁거릴 때 레몬사탕을 먹고 속이 조금 편해짐',
-      triggerType: 'X',
-      symptom: '입덧완화',
-      intensity: 0,
-    },
-    {
-      id: 2,
-      date,
-      timeCategory: '오전',
-      emotion: 'bad',
-      title: '계란비린내로 인한 심한 메스꺼움/식사 중단',
-      triggerType: '음식냄새',
-      symptom: '메스꺼움',
-      intensity: 4,
-    },
-    {
-      id: 3,
-      date,
-      timeCategory: '새벽',
-      emotion: 'soso',
-      title: '아무것도 먹지 않은 공복상태로 속이 울렁거림',
-      triggerType: '환경',
-      symptom: '울렁거림',
-      intensity: 3,
-    },
-  ]
-}
-
-function loadStoredRecords() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (raw) return JSON.parse(raw)
-  } catch {
-    // 저장된 값이 깨졌으면 무시하고 시드 데이터로 대체
+function mapRecord(record) {
+  const dateTime = record.recordDateTime
+  return {
+    id: record.recordId,
+    date: dateTime ? dateTime.slice(0, 10) : null,
+    recordDateTime: dateTime,
+    timeCategory: record.timeCategory?.name ?? '',
+    timeCategoryId: record.timeCategory?.timeCategoryId ?? null,
+    intensityId: record.intensity?.intensityId ?? null,
+    intensity: record.intensity?.level ?? 0,
+    emotion: emotionFromIntensityLevel(record.intensity?.level),
+    title: record.memo || '기록',
+    memo: record.memo ?? '',
+    status: record.status,
+    // 목록 조회 응답에는 AI 분석 결과가 없어서, 분석을 조회하기 전까지는 비워둔다
+    triggerType: '-',
+    symptom: record.intensity?.description ?? '',
+    analysis: null,
   }
-  return createSeedRecords()
 }
 
 export function RecordsProvider({ children }) {
-  const [todayRecords, setTodayRecords] = useState(loadStoredRecords)
+  const [todayRecords, setTodayRecords] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+
+  const refresh = useCallback(async () => {
+    if (!isLoggedIn()) {
+      setTodayRecords([])
+      return
+    }
+    setLoading(true)
+    setError(null)
+    try {
+      const data = await getRecords()
+      setTodayRecords(data.map(mapRecord))
+    } catch (err) {
+      setError(err)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(todayRecords))
-  }, [todayRecords])
+    let cancelled = false
 
-  const addRecord = (record) => {
-    setTodayRecords((records) => [...records, record])
-  }
+    const load = async () => {
+      // effect 실행과 동기적으로 얽히지 않도록 한 틱 양보한 뒤 상태를 갱신한다
+      await Promise.resolve()
+      if (!cancelled) await refresh()
+    }
+
+    load()
+    return () => {
+      cancelled = true
+    }
+  }, [refresh])
+
+  const addRecord = useCallback(async ({ timeCategoryId, intensityId, recordDateTime, memo }) => {
+    const { recordId } = await createRecord({ timeCategoryId, intensityId, recordDateTime, memo })
+    await refresh()
+    return recordId
+  }, [refresh])
+
+  const analyzeAndAttach = useCallback(async (recordId) => {
+    const analysis = await analyzeRecord(recordId)
+    setTodayRecords((prev) =>
+      prev.map((record) =>
+        record.id === recordId
+          ? {
+              ...record,
+              title: analysis.aiSummary || record.title,
+              triggerType: analysis.triggerFactor || record.triggerType,
+              symptom: analysis.symptomSummary || record.symptom,
+              analysis,
+            }
+          : record
+      )
+    )
+    return analysis
+  }, [])
+
+  const editRecord = useCallback(async (recordId, payload) => {
+    await updateRecordApi(recordId, payload)
+    await refresh()
+  }, [refresh])
+
+  const removeRecord = useCallback(async (recordId) => {
+    await deleteRecordApi(recordId)
+    setTodayRecords((prev) => prev.filter((record) => record.id !== recordId))
+  }, [])
 
   return (
-    <RecordsContext.Provider value={{ todayRecords, addRecord }}>
+    <RecordsContext.Provider
+      value={{ todayRecords, loading, error, refresh, addRecord, analyzeAndAttach, editRecord, removeRecord }}
+    >
       {children}
     </RecordsContext.Provider>
   )

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../assets/MyPage/scss/mypage.scss';
 
@@ -8,25 +8,56 @@ import notification from '../../assets/MyPage/img/mypage_notification.svg';
 import authority from '../../assets/MyPage/img/mypage_authority.svg';
 import logout from '../../assets/MyPage/img/mypage_logout.svg';
 import arrow from '../../assets/Mypage/img/arrow.svg';
+import { getMe } from '../../api/user.js';
+import { logout as logoutApi } from '../../api/auth.js';
+import { clearTokens, getRefreshToken } from '../../api/tokenStorage.js';
+import { resolveMediaUrl, getErrorMessage } from '../../api/client.js';
 
 
 function MyPage() {
     const navigate = useNavigate();
 
-    // 1. 백엔드에서 받아올 사용자 정보 상태 (초기 더미값)
     const [userData, setUserData] = useState({
         profileImage: defaultProfileImg,
-        nickname: '다온',
-        pregnancyWeek: 9,
-        dueDate: '2027.03.27',
+        nickname: '',
+        pregnancyWeek: '',
+        dueDate: '',
     });
+
+    useEffect(() => {
+        let cancelled = false;
+        getMe()
+            .then((data) => {
+                if (cancelled) return;
+                setUserData({
+                    profileImage: resolveMediaUrl(data.profileImage) || defaultProfileImg,
+                    nickname: data.nickname,
+                    pregnancyWeek: data.pregnancyWeek,
+                    dueDate: data.dueDate,
+                });
+            })
+            .catch((err) => {
+                console.error(getErrorMessage(err));
+            });
+        return () => {
+            cancelled = true;
+        };
+    }, []);
 
     const handleEdit = () => {
         navigate(`/mypage/edit`);
 
     };
-    const handleLogout = () => {
-        navigate('/');
+    const handleLogout = async () => {
+        try {
+            const refreshToken = getRefreshToken();
+            if (refreshToken) await logoutApi(refreshToken);
+        } catch {
+            // 서버 로그아웃이 실패해도 클라이언트 토큰은 지운다
+        } finally {
+            clearTokens();
+            navigate('/');
+        }
     };
     const handleNotification = () => {
         navigate('/mypage/notification');
@@ -40,7 +71,7 @@ function MyPage() {
         <div className='mypage_wrap'>
             <div className="mypage_nav"></div>
             <div className="mypage_info">
-                <img src={defaultProfileImg} alt="" />
+                <img src={userData.profileImage} alt="" />
                 <section>
                     <div className="mp_row">
                         <div className="mp_row_left">

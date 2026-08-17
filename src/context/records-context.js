@@ -13,6 +13,13 @@ export function todayDateKey() {
   return formatDateKey(now.getFullYear(), now.getMonth(), now.getDate())
 }
 
+export function emotionFromIntensityLevel(level) {
+  if (level == null) return 'soso'
+  if (level <= 1) return 'good'
+  if (level <= 3) return 'soso'
+  return 'bad'
+}
+
 export function useRecords() {
   const context = useContext(RecordsContext)
   if (!context) {
