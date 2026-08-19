@@ -7,7 +7,7 @@ import edit from '../../assets/MyPage/img/mypage_edit.svg';
 import notification from '../../assets/MyPage/img/mypage_notification.svg';
 import authority from '../../assets/MyPage/img/mypage_authority.svg';
 import logout from '../../assets/MyPage/img/mypage_logout.svg';
-import arrow from '../../assets/Mypage/img/arrow.svg';
+import arrow from '../../assets/MyPage/img/arrow.svg';
 import { getMe } from '../../api/user.js';
 import { logout as logoutApi } from '../../api/auth.js';
 import { clearTokens, getRefreshToken } from '../../api/tokenStorage.js';

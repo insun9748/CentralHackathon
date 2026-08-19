@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../assets/mypage/scss/mypage_authority.scss';
+import '../../assets/MyPage/scss/mypage_authority.scss';
 
 import arrowLeftIcon from '../../assets/tracker/img/tracker_left.svg';
 import micIcon from '../../assets/MyPage/img/mic.svg';
