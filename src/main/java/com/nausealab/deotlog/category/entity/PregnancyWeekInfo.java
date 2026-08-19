@@ -1,29 +1,28 @@
 package com.nausealab.deotlog.category.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "PregnancyWeekInfo")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
+@Table(name = "pregnancy_week_info")
 public class PregnancyWeekInfo {
 
     @Id
     @Column(name = "week")
     private Integer week;
 
-    @Lob
-    @Column(name = "caution")
-    private String caution;
-
-    @Lob
-    @Column(name = "food_info")
-    private String foodInfo;
-
-    @Lob
-    @Column(name = "body_change")
-    private String bodyChange;
+    @OneToMany(
+            mappedBy = "pregnancyWeekInfo",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @Builder.Default
+    private List<PregnancyWeekContent> contents = new ArrayList<>();
 }

@@ -1,16 +1,20 @@
 package com.nausealab.deotlog.tracker.service;
 
+import com.nausealab.deotlog.category.entity.PregnancyWeekContent;
 import com.nausealab.deotlog.category.entity.PregnancyWeekInfo;
+import com.nausealab.deotlog.category.entity.SectionType;
+import com.nausealab.deotlog.category.repository.PregnancyWeekContentRepository;
 import com.nausealab.deotlog.category.repository.PregnancyWeekInfoRepository;
 import com.nausealab.deotlog.global.exception.CustomException;
 import com.nausealab.deotlog.global.exception.ErrorCode;
+import com.nausealab.deotlog.record.entity.Record;
+import com.nausealab.deotlog.record.repository.RecordRepository;
 import com.nausealab.deotlog.tracker.dto.response.CalendarDayResponse;
 import com.nausealab.deotlog.tracker.dto.response.CalendarResponse;
 import com.nausealab.deotlog.tracker.dto.response.TrackerResponse;
+import com.nausealab.deotlog.tracker.dto.response.WeekContentResponse;
 import com.nausealab.deotlog.user.entity.User;
-import com.nausealab.deotlog.record.entity.Record;
 import com.nausealab.deotlog.user.repository.UserRepository;
-import com.nausealab.deotlog.record.repository.RecordRepository;
 import com.nausealab.deotlog.user.util.PregnancyWeekCalculator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,10 +33,9 @@ public class TrackerServiceImpl implements TrackerService {
 
     private final UserRepository userRepository;
     private final PregnancyWeekInfoRepository pregnancyWeekInfoRepository;
+    private final PregnancyWeekContentRepository pregnancyWeekContentRepository;
     private final PregnancyWeekCalculator pregnancyWeekCalculator;
     private final RecordRepository recordRepository;
-
-
 
     @Override
     public TrackerResponse getTracker(Long userId) {
@@ -55,15 +58,49 @@ public class TrackerServiceImpl implements TrackerService {
                                         ErrorCode.PREGNANCY_WEEK_INFO_NOT_FOUND
                                 ));
 
+        List<WeekContentResponse> foodInfo =
+                getContents(info.getWeek(), SectionType.FOOD);
+
+        List<WeekContentResponse> caution =
+                getContents(info.getWeek(), SectionType.CAUTION);
+
+        List<WeekContentResponse> bodyChange =
+                getContents(info.getWeek(), SectionType.BODY_CHANGE);
+
         return TrackerResponse.builder()
                 .currentWeek(currentWeek)
                 .stage(getStage(currentWeek))
-                .caution(info.getCaution())
-                .foodInfo(info.getFoodInfo())
-                .bodyChange(info.getBodyChange())
+                .foodInfo(foodInfo)
+                .caution(caution)
+                .bodyChange(bodyChange)
                 .build();
     }
 
+    private List<WeekContentResponse> getContents(
+            Integer week,
+            SectionType section
+    ) {
+
+        return pregnancyWeekContentRepository
+                .findByPregnancyWeekInfo_WeekAndSectionOrderByDisplayOrderAsc(
+                        week,
+                        section
+                )
+                .stream()
+                .map(this::toWeekContentResponse)
+                .toList();
+    }
+
+    private WeekContentResponse toWeekContentResponse(
+            PregnancyWeekContent content
+    ) {
+
+        return WeekContentResponse.builder()
+                .title(content.getTitle())
+                .description(content.getDescription())
+                .highlight(content.getHighlight())
+                .build();
+    }
 
     private String getStage(int week) {
 
