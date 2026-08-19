@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import TrackerRecordCard from '../../components/TrackerRecordCard/TrackerRecordCard.jsx';
 import { formatDateKey, emotionFromIntensityLevel, useRecords } from '../../context/records-context.js';
 import { getTracker, getCalendar } from '../../api/tracker.js';
+import { getMe } from '../../api/user.js';
 import { getErrorMessage } from '../../api/client.js';
 import '../../assets/tracker/scss/tracker_main.scss';
 
@@ -29,6 +30,18 @@ function Tracker_main() {
     getTracker()
       .then((data) => {
         setPregnancyInfo((prev) => ({ ...prev, weeks: data.currentWeek }));
+      })
+      .catch((err) => console.error(getErrorMessage(err)));
+
+    // 출산예정일 기준으로 "N주 D일차"의 D(일차)를 클라이언트에서 계산
+    getMe()
+      .then((data) => {
+        if (!data.dueDate) return;
+        const due = new Date(data.dueDate);
+        const diffDays = Math.round((due.getTime() - realToday.getTime()) / (1000 * 60 * 60 * 24));
+        const totalDaysPregnant = 280 - diffDays;
+        const days = ((totalDaysPregnant % 7) + 7) % 7;
+        setPregnancyInfo((prev) => ({ ...prev, days }));
       })
       .catch((err) => console.error(getErrorMessage(err)));
   }, []);
@@ -111,7 +124,9 @@ function Tracker_main() {
       {/* 상단 임신 주차 정보 */}
       <div className="tracker_main_header">
         <h3 className="tracker_main_week">
-          {pregnancyInfo.weeks != null ? `임신 ${pregnancyInfo.weeks}주차에요` : '임신 정보를 불러오는 중...'}
+          {pregnancyInfo.weeks != null
+            ? `임신 ${pregnancyInfo.weeks}주 ${pregnancyInfo.days ?? 0}일차에요`
+            : '임신 정보를 불러오는 중...'}
         </h3>
         <button type="button" className="tracker_info_link_btn" onClick={handleThisWeek}>
           이번 주 임신 정보 보러가기 <img src={arrowRightIcon} alt="" />

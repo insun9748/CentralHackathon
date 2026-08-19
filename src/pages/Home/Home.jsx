@@ -27,8 +27,7 @@ const ANALYSIS_FIELD_DEFS = [
   { id: 'nauseaType', label: '입덧 유형', options: NAUSEA_TYPES },
   { id: 'reliefFactor', label: '완화 요인' },
   { id: 'situationAnalysis', label: '발생 상황' },
-  { id: 'foodAnalysis', label: '음식 분석' },
-  { id: 'emotionAnalysis', label: '감정 분석' },
+  { id: 'emotionAnalysis', label: '감정 및 컨디션' },
 ]
 
 function Home() {
@@ -50,6 +49,8 @@ function Home() {
   const [currentRecordId, setCurrentRecordId] = useState(null)
   const [currentRecordDateTime, setCurrentRecordDateTime] = useState(null)
   const [aiSummary, setAiSummary] = useState('')
+  // 화면에는 안 보여주지만, 저장할 때 백엔드로 그대로 다시 보내줘야 하는 값
+  const [foodAnalysis, setFoodAnalysis] = useState('')
   const [saving, setSaving] = useState(false)
   const [nickname, setNickname] = useState('')
 
@@ -92,6 +93,7 @@ function Home() {
     setCurrentRecordId(null)
     setCurrentRecordDateTime(null)
     setAiSummary('')
+    setFoodAnalysis('')
     setViewState('form')
   }
 
@@ -126,13 +128,13 @@ function Home() {
 
       const analysis = await analyzeAndAttach(recordId)
       setAiSummary(analysis.aiSummary ?? '')
+      setFoodAnalysis(analysis.foodAnalysis ?? '')
       setFieldValues({
         triggerFactor: analysis.triggerFactor ?? '',
         symptomSummary: analysis.symptomSummary ?? '',
         nauseaType: analysis.nauseaType ?? NAUSEA_TYPES[0],
         reliefFactor: analysis.reliefFactor ?? '',
         situationAnalysis: analysis.situationAnalysis ?? '',
-        foodAnalysis: analysis.foodAnalysis ?? '',
         emotionAnalysis: analysis.emotionAnalysis ?? '',
       })
       // 필드 값이 준비된 뒤에야 한 줄씩 공개하는 애니메이션을 시작한다
@@ -161,6 +163,7 @@ function Home() {
         recordDateTime: currentRecordDateTime,
         memo: recordText,
         aiSummary,
+        foodAnalysis,
         ...fieldValues,
       })
       resetForm()

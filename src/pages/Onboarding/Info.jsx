@@ -4,6 +4,13 @@ import '../../assets/onboarding/scss/info.scss';
 import { updateMe } from '../../api/user.js';
 import { getErrorMessage } from '../../api/client.js';
 
+// '20270707' -> '2027-07-07'
+function digitsToIsoDate(digits) {
+    const clean = (digits || '').replace(/\D/g, '');
+    if (clean.length !== 8) return null;
+    return `${clean.slice(0, 4)}-${clean.slice(4, 6)}-${clean.slice(6, 8)}`;
+}
+
 function Info1() {
 
     const navigate = useNavigate();
@@ -21,20 +28,21 @@ function Info1() {
             return;
         }
 
-        const week = Number(pregnancyWeek);
+        const week = Number(pregnancyWeek.replace(/\D/g, ''));
         if (!week || week < 1 || week > 40) {
-            alert('임신 주차는 1~40 사이로 입력해 주세요.');
+            alert('임신 주차는 1~40 사이로 입력해 주세요. (예: 9주차)');
             return;
         }
 
-        if (!dueDate) {
-            alert('출산 예정일을 입력해 주세요.');
+        const isoDueDate = digitsToIsoDate(dueDate);
+        if (!isoDueDate) {
+            alert('출산 예정일을 YYYYMMDD 형식으로 입력해 주세요.');
             return;
         }
 
         setSubmitting(true);
         try {
-            await updateMe({ nickname, pregnancyWeek: week, dueDate }, profileImageFile);
+            await updateMe({ nickname, pregnancyWeek: week, dueDate: isoDueDate }, profileImageFile);
             navigate('/home');
         } catch (err) {
             alert(getErrorMessage(err, '회원 정보 저장에 실패했습니다.'));
@@ -62,11 +70,9 @@ function Info1() {
                 <div className="info_input_box">
                     <p className='info_p'>임신 주차</p>
                     <input
-                        type="number"
+                        type="text"
                         className='info_input'
                         placeholder='n주차'
-                        min={1}
-                        max={40}
                         value={pregnancyWeek}
                         onChange={(e) => setPregnancyWeek(e.target.value)}
                     />
@@ -75,8 +81,9 @@ function Info1() {
                 <div className="info_input_box">
                     <p className='info_p'>출산 예정일</p>
                     <input
-                        type="date"
+                        type="text"
                         className='info_input'
+                        placeholder='ex 20270707'
                         value={dueDate}
                         onChange={(e) => setDueDate(e.target.value)}
                     />

@@ -10,8 +10,6 @@ import '../../assets/tracker/scss/tracker_detail.scss';
 
 import arrowLeftIcon from '../../assets/tracker/img/tracker_left.svg';
 
-const NAUSEA_TYPES = ['침덧', '토덧', '먹덧'];
-
 function formatDate(recordDateTime) {
   if (!recordDateTime) return '';
   return recordDateTime.slice(0, 10).replace(/-/g, '.');
@@ -54,7 +52,7 @@ function TrackerDetail() {
           memo: data.memo ?? '',
           triggerFactor: '',
           reliefFactor: '',
-          nauseaType: NAUSEA_TYPES[0],
+          nauseaType: '',
           symptomSummary: '',
           situationAnalysis: '',
           foodAnalysis: '',
@@ -78,7 +76,7 @@ function TrackerDetail() {
           ...prev,
           triggerFactor: data.triggerFactor ?? '',
           reliefFactor: data.reliefFactor ?? '',
-          nauseaType: data.nauseaType ?? NAUSEA_TYPES[0],
+          nauseaType: data.nauseaType ?? '',
           symptomSummary: data.symptomSummary ?? '',
           situationAnalysis: data.situationAnalysis ?? '',
           foodAnalysis: data.foodAnalysis ?? '',
@@ -93,9 +91,14 @@ function TrackerDetail() {
   }, [id]);
 
   const canEdit = record?.status === 'DRAFT';
+  const triggerTags = (form?.triggerFactor || '').split(',').map((t) => t.trim()).filter(Boolean);
 
   const handleFormChange = (field, value) => {
     setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleTriggerChange = (e) => {
+    handleFormChange('triggerFactor', e.target.value);
   };
 
   const handleOpenModal = () => {
@@ -209,6 +212,7 @@ function TrackerDetail() {
             </span>
           </div>
 
+          {/* 유발원인 */}
           <div className="tracker_row">
             <span className="tracker_label">유발원인</span>
             {isEditing ? (
@@ -216,25 +220,34 @@ function TrackerDetail() {
                 type="text"
                 className="tracker_edit_input"
                 value={form.triggerFactor}
-                onChange={(e) => handleFormChange('triggerFactor', e.target.value)}
+                onChange={handleTriggerChange}
+                placeholder="쉼표(,)로 구분"
               />
             ) : (
-              <span className="tracker_value">{form.triggerFactor || '-'}</span>
+              <div className="tracker_tag_group">
+                {triggerTags.length > 0 ? (
+                  triggerTags.map((tag, idx) => (
+                    <span key={idx} className="tracker_cause_tag">
+                      {tag}
+                    </span>
+                  ))
+                ) : (
+                  <span className="tracker_value">-</span>
+                )}
+              </div>
             )}
           </div>
 
+          {/* 입덧유형 */}
           <div className="tracker_row">
             <span className="tracker_label">입덧유형</span>
             {isEditing ? (
-              <select
+              <input
+                type="text"
                 className="tracker_edit_input"
                 value={form.nauseaType}
                 onChange={(e) => handleFormChange('nauseaType', e.target.value)}
-              >
-                {NAUSEA_TYPES.map((type) => (
-                  <option key={type} value={type}>{type}</option>
-                ))}
-              </select>
+              />
             ) : (
               <span className="tracker_value">{form.nauseaType}</span>
             )}
@@ -259,6 +272,20 @@ function TrackerDetail() {
         {/* 3. 분석 요약 카드 */}
         <section className="tracker_detail_card analysis_card">
           <div className="tracker_row">
+            <span className="tracker_mint_label">입덧 유발 요인</span>
+            {isEditing ? (
+              <input
+                type="text"
+                className="tracker_edit_input"
+                value={form.triggerFactor}
+                onChange={handleTriggerChange}
+              />
+            ) : (
+              <span className="tracker_value">{form.triggerFactor || '-'}</span>
+            )}
+          </div>
+
+          <div className="tracker_row">
             <span className="tracker_mint_label">증상 요약</span>
             {isEditing ? (
               <input
@@ -269,6 +296,20 @@ function TrackerDetail() {
               />
             ) : (
               <span className="tracker_value">{form.symptomSummary || '-'}</span>
+            )}
+          </div>
+
+          <div className="tracker_row">
+            <span className="tracker_mint_label">입덧 유형</span>
+            {isEditing ? (
+              <input
+                type="text"
+                className="tracker_edit_input"
+                value={form.nauseaType}
+                onChange={(e) => handleFormChange('nauseaType', e.target.value)}
+              />
+            ) : (
+              <span className="tracker_value">{form.nauseaType}</span>
             )}
           </div>
 
@@ -303,21 +344,7 @@ function TrackerDetail() {
           </div>
 
           <div className="tracker_row">
-            <span className="tracker_mint_label">음식 분석</span>
-            {isEditing ? (
-              <input
-                type="text"
-                className="tracker_edit_input"
-                value={form.foodAnalysis}
-                onChange={(e) => handleFormChange('foodAnalysis', e.target.value)}
-              />
-            ) : (
-              <span className="tracker_value">{form.foodAnalysis || '-'}</span>
-            )}
-          </div>
-
-          <div className="tracker_row">
-            <span className="tracker_mint_label">감정 분석</span>
+            <span className="tracker_mint_label">감정 및 컨디션</span>
             {isEditing ? (
               <input
                 type="text"

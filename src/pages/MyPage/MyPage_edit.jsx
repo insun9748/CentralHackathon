@@ -8,6 +8,18 @@ import camera from '../../assets/MyPage/img/camera.svg';
 import { getMe, updateMe } from '../../api/user.js';
 import { resolveMediaUrl, getErrorMessage } from '../../api/client.js';
 
+// '2027-03-27' -> '20270327'
+function isoDateToDigits(isoDate) {
+    return (isoDate || '').replace(/-/g, '');
+}
+
+// '20270327' -> '2027-03-27'
+function digitsToIsoDate(digits) {
+    const clean = (digits || '').replace(/\D/g, '');
+    if (clean.length !== 8) return null;
+    return `${clean.slice(0, 4)}-${clean.slice(4, 6)}-${clean.slice(6, 8)}`;
+}
+
 function MyPage_edit() {
 
     const navigate = useNavigate();
@@ -32,8 +44,8 @@ function MyPage_edit() {
                 const loaded = {
                     profileImage: resolveMediaUrl(data.profileImage) || defaultProfileImg,
                     nickname: data.nickname,
-                    pregnancyWeek: String(data.pregnancyWeek ?? ''),
-                    dueDate: data.dueDate ?? '',
+                    pregnancyWeek: data.pregnancyWeek != null ? `${data.pregnancyWeek}주차` : '',
+                    dueDate: isoDateToDigits(data.dueDate),
                 };
                 setInitialData(loaded);
                 setFormData(loaded);
@@ -75,24 +87,26 @@ function MyPage_edit() {
     const handleSave = async () => {
         if (!isChanged) return;
 
-        const week = Number(formData.pregnancyWeek);
+        const week = Number(String(formData.pregnancyWeek).replace(/\D/g, ''));
+        const isoDueDate = digitsToIsoDate(formData.dueDate);
+
         if (formData.nickname.trim().length < 1) {
             alert('닉네임을 입력해 주세요.');
             return;
         }
         if (!week || week < 1 || week > 40) {
-            alert('임신 주차는 1~40 사이로 입력해 주세요.');
+            alert('임신 주차는 1~40 사이로 입력해 주세요. (예: 9주차)');
             return;
         }
-        if (!formData.dueDate) {
-            alert('출산 예정일을 입력해 주세요.');
+        if (!isoDueDate) {
+            alert('출산 예정일을 YYYYMMDD 형식으로 입력해 주세요.');
             return;
         }
 
         setSaving(true);
         try {
             await updateMe(
-                { nickname: formData.nickname, pregnancyWeek: week, dueDate: formData.dueDate },
+                { nickname: formData.nickname, pregnancyWeek: week, dueDate: isoDueDate },
                 profileImageFile
             );
             navigate('/mypage');
@@ -167,23 +181,22 @@ function MyPage_edit() {
                     <div className="pf_form_item">
                         <label className="pf_form_label">임신 주차</label>
                         <input
-                            type="number"
+                            type="text"
                             className="pf_form_input"
-                            min={1}
-                            max={40}
                             value={formData.pregnancyWeek}
                             onChange={(e) => handleInputChange('pregnancyWeek', e.target.value)}
-                            placeholder="예: 9"
+                            placeholder="예: 9주차"
                         />
                     </div>
 
                     <div className="pf_form_item">
                         <label className="pf_form_label">출산예정일</label>
                         <input
-                            type="date"
+                            type="text"
                             className="pf_form_input"
                             value={formData.dueDate}
                             onChange={(e) => handleInputChange('dueDate', e.target.value)}
+                            placeholder="YYYYMMDD"
                         />
                     </div>
                 </div>
