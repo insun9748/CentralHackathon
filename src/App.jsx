@@ -24,7 +24,6 @@ function App() {
     <RecordsProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/tracker" element={<TrackerMain />} />
           <Route path="/" element={<Onboarding />} />
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<Profile />} />
