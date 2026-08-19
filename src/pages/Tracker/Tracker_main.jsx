@@ -98,8 +98,8 @@ function Tracker_main() {
   //현재 날짜로 돌아가는 버튼
   const isToday =
     currentDate.getFullYear() === realToday.getFullYear() &&
-    currentDate.getMonth() === realToday.getMonth() &&
-    selectedDay === realToday.getDate();
+    currentDate.getMonth() === realToday.getMonth() ;
+    // selectedDay === realToday.getDate();
 
   const handleGoToday = () => {
     setCurrentDate(new Date(realToday.getFullYear(), realToday.getMonth(), 1));
