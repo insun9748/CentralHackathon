@@ -47,7 +47,7 @@ function Signup() {
       // 가입 직후 바로 로그인해서 온보딩(프로필 입력) 단계로 진행한다
       const tokens = await login({ email, password });
       setTokens(tokens);
-      navigate('/login');
+      navigate('/login', {state: {from: 'signup' } });
     } catch (err) {
       alert(getErrorMessage(err, '회원가입에 실패했습니다.'));
     } finally {
