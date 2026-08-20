@@ -5,6 +5,12 @@
   position: relative;
   background: $white;
   padding-bottom: 90px;
+
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .home-nav {
@@ -85,6 +91,8 @@
 
 .home-records {
   padding: 15px 20px 0;
+  flex: 1;
+  min-height: 0;
 }
 
 .home-records-title {
