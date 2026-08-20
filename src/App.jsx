@@ -33,6 +33,7 @@ function App() {
           <Route element={<RequireAuth />}>
             <Route element={<Layout />}>
               <Route path="/home" element={<Home />} />
+              <Route path="/home/record/:id" element={<TrackerDetail />} />
               <Route path="/report" element={<Report />} />
               <Route path="/report/triggers" element={<ReportTriggers />} />
               <Route path="/report/relief" element={<ReportRelief />} />
