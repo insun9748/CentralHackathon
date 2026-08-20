@@ -23,4 +23,10 @@ public class RecordResponse {
     private String memo;
 
     private RecordStatus status;
+
+    private String aiSummary;
+
+    private String triggerFactor;
+
+    private String symptomSummary;
 }

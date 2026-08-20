@@ -13,22 +13,48 @@ import java.util.Optional;
 
 public interface RecordRepository extends JpaRepository<Record, Long> {
 
-    List<Record> findByUserOrderByRecordDateTimeDesc(User user);
-
-    List<Record> findByUserAndRecordDateTimeBetween(
-            User user,
-            LocalDateTime start,
-            LocalDateTime end
-    );
-
-    Optional<Record> findByRecordIdAndUser(
-            Long recordId,
-            User user
+    @Query("""
+        SELECT r
+        FROM Record r
+        LEFT JOIN FETCH r.aiAnalysis
+        WHERE r.user = :user
+        ORDER BY r.recordDateTime DESC
+        """)
+    List<Record> findByUserOrderByRecordDateTimeDesc(
+            @Param("user") User user
     );
 
     @Query("""
         SELECT r
         FROM Record r
+        LEFT JOIN FETCH r.aiAnalysis
+        WHERE r.user = :user
+          AND r.recordDateTime >= :start
+          AND r.recordDateTime < :end
+        ORDER BY r.recordDateTime DESC
+        """)
+    List<Record> findByUserAndRecordDateTimeBetween(
+            @Param("user") User user,
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end
+    );
+
+    @Query("""
+        SELECT r
+        FROM Record r
+        LEFT JOIN FETCH r.aiAnalysis
+        WHERE r.recordId = :recordId
+          AND r.user = :user
+        """)
+    Optional<Record> findByRecordIdAndUser(
+            @Param("recordId") Long recordId,
+            @Param("user") User user
+    );
+
+    @Query("""
+        SELECT r
+        FROM Record r
+        LEFT JOIN FETCH r.aiAnalysis
         WHERE r.user = :user
           AND r.status = :status
           AND r.recordDateTime >= :startDateTime
@@ -44,9 +70,10 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
     @Query("""
         SELECT r
         FROM Record r
+        LEFT JOIN FETCH r.aiAnalysis
         WHERE r.user = :user
-        AND r.recordDateTime >= :start
-        AND r.recordDateTime < :end
+          AND r.recordDateTime >= :start
+          AND r.recordDateTime < :end
         ORDER BY r.recordDateTime
         """)
     List<Record> findCalendarRecords(
@@ -59,5 +86,4 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
             RecordStatus status,
             LocalDateTime createdAt
     );
-
 }

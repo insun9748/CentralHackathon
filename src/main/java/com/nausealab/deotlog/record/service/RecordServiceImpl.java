@@ -108,6 +108,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     private RecordResponse toRecordResponse(Record record) {
+        AiAnalysis ai = record.getAiAnalysis();
 
         return RecordResponse.builder()
                 .recordId(record.getRecordId())
@@ -132,6 +133,10 @@ public class RecordServiceImpl implements RecordService {
                 .memo(record.getMemo())
 
                 .status(record.getStatus())
+
+                .aiSummary(ai == null ? null : ai.getAiSummary())
+                .triggerFactor(ai == null ? null : ai.getTriggerFactor())
+                .symptomSummary(ai == null ? null : ai.getSymptomSummary())
 
                 .build();
     }
