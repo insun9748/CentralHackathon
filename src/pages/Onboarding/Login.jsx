@@ -22,7 +22,7 @@ function Login() {
         try {
             const tokens = await login({ email, password });
             setTokens(tokens);
-            navigate('/info');
+            navigate('/profile');
         } catch (err) {
             alert(getErrorMessage(err, '로그인에 실패했습니다.'));
         } finally {
