@@ -8,7 +8,7 @@ import './TrackerRecordCard.scss'
 const emotionIcons = { good: goodIcon, soso: sosoIcon, bad: badIcon }
 const emotionLabels = { good: '좋음', soso: '보통', bad: '나쁨' }
 
-function TrackerRecordCard({ record }) {
+function TrackerRecordCard({ record, basePath = '/tracker/detail' }) {
   const navigate = useNavigate()
   const { id, timeCategory, emotion, title, triggerType, symptom, intensity } = record
 
@@ -25,7 +25,7 @@ function TrackerRecordCard({ record }) {
           src={cardArrow}
           className="tracker_card_arrow"
           alt=""
-          onClick={() => navigate(`/tracker/detail/${id}`)}
+          onClick={() => navigate(`${basePath}/${id}`)}
         />
       </div>
 

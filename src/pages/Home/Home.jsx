@@ -19,7 +19,8 @@ import '../../assets/Home/scss/Home.scss'
 
 const REVEAL_INTERVAL_MS = 500
 
-const NAUSEA_TYPES = ['침덧', '토덧', '먹덧']
+// 백엔드 AI 분석 프롬프트가 반환 가능한 입덧 유형과 동일하게 유지
+const NAUSEA_TYPES = ['토덧', '먹덧', '체덧', '침덧', '냄새덧', '양치덧', '판단 불가']
 
 const ANALYSIS_FIELD_DEFS = [
   { id: 'triggerFactor', label: '입덧 유발 요인' },
@@ -292,7 +293,7 @@ function Home() {
         ) : (
           <div className="record_card_list">
             {recordsToday.map((record) => (
-              <TrackerRecordCard key={record.id} record={record} />
+              <TrackerRecordCard key={record.id} record={record} basePath="/home/record" />
             ))}
           </div>
         )}
