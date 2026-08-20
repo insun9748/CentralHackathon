@@ -292,7 +292,7 @@ function Home() {
         ) : (
           <div className="record_card_list">
             {recordsToday.map((record) => (
-              <TrackerRecordCard key={record.id} record={record} />
+              <TrackerRecordCard key={record.id} record={record} basePath="/home/record" />
             ))}
           </div>
         )}
