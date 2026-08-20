@@ -8,7 +8,7 @@ function Onboarding() {
     const navigate = useNavigate();
 
     const handleLogin = () => {
-        navigate('/login');
+        navigate('/login', { state: {from: 'onboarding' } });
     }
 
     const handleSignup = () => {
