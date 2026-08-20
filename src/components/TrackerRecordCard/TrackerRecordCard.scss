@@ -60,12 +60,16 @@
             font-weight: $medium;
             font-size: 15px;
             margin-bottom: 12px;
+            overflow: scroll;
+            scrollbar-width: none;
         }
 
         .tracker_card_info {
             font-weight: $medium;
             font-size: 12px;
             color: #ACACAC;
+            overflow: scroll;
+            scrollbar-width: none;
         }
     }
 }
