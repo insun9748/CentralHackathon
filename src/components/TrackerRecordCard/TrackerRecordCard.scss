@@ -8,6 +8,9 @@
     flex: 1;
     overflow-y: auto;
     margin-bottom: 120px;
+    > * {
+      flex-shrink: 0;
+    }
 
     &::-webkit-scrollbar {
         display: none;
