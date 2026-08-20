@@ -171,7 +171,9 @@
         }
 
         // 카드 리스트 스타일은 src/components/TrackerRecordCard/TrackerRecordCard.scss 에서 관리
-
+        > * {
+      flex-shrink: 0;
+        }
         .record_empty_text {
             font-weight: $regular;
             font-size: 12px;
