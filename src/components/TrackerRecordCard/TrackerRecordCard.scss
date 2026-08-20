@@ -28,10 +28,11 @@
         background-color: #fff;
         padding: 16px 15px 17px 18px;
         width: 353px;
-        height: 120px;
-        overflow: scroll;
-        scrollbar-width: none;
-
+        min-height: 120px;
+        height: auto;
+        overflow: visible;
+        flex-shrink: 0;
+        
         .tracker_card_header {
             display: flex;
             flex-direction: row;
