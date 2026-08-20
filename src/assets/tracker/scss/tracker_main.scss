@@ -3,9 +3,10 @@
 .tracker_wrap {
     margin: 0 auto;
     width: 353px;
-    min-height: 782px;
+    height: 782px;
     padding-top: 70px;
     margin-bottom: 120px;
+    overflow: hidden;
 
     .tracker_main_title {
         font-size: 20px;
@@ -148,7 +149,8 @@
     //하단 카드 영역
     .tracker_record_section {
         margin-top: 84px;
-
+        overflow: scroll;
+        scrollbar-width: none;
         //날짜 타이틀
         .record_section_title {
             font-weight: $medium;
