@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import '../../assets/onboarding/scss/login.scss';
 import { login } from '../../api/auth.js';
 import { setTokens } from '../../api/tokenStorage.js';
@@ -7,7 +7,9 @@ import { getErrorMessage } from '../../api/client.js';
 
 function Login() {
     const navigate = useNavigate();
-
+    const location = useLocation();
+    const from = location.state?.from;
+    
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [submitting, setSubmitting] = useState(false);
@@ -22,7 +24,15 @@ function Login() {
         try {
             const tokens = await login({ email, password });
             setTokens(tokens);
-            navigate('/profile');
+
+            if(from === 'signup'){
+                navigate('/profile');
+            } else if (from === 'onboarding') {
+                navigate('/home');
+            } else {
+                navigate('/home');
+            }
+          
         } catch (err) {
             alert(getErrorMessage(err, '로그인에 실패했습니다.'));
         } finally {
