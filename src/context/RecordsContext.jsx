@@ -39,7 +39,9 @@ export function RecordsProvider({ children }) {
     setError(null)
     try {
       const data = await getRecords()
-      setTodayRecords(data.map(mapRecord))
+      // AI 자동정리를 누르면 분석용으로 레코드가 먼저 생성되지만, 사용자가 "기록 저장"을
+      // 누르기 전까지는 DRAFT 상태 — 저장 확정 전 기록은 기록 목록에 노출하지 않는다
+      setTodayRecords(data.filter((record) => record.status !== 'DRAFT').map(mapRecord))
     } catch (err) {
       setError(err)
     } finally {
