@@ -63,10 +63,11 @@ export function RecordsProvider({ children }) {
   }, [refresh])
 
   const addRecord = useCallback(async ({ timeCategoryId, intensityId, recordDateTime, memo }) => {
+    // 여기서는 AI 분석용으로 기록을 미리 만들 뿐, 아직 사용자가 "기록 저장"을 누른 게 아니므로
+    // 목록(todayRecords)은 갱신하지 않는다 — "기록 저장" 시점(editRecord)에만 반영됨
     const { recordId } = await createRecord({ timeCategoryId, intensityId, recordDateTime, memo })
-    await refresh()
     return recordId
-  }, [refresh])
+  }, [])
 
   const analyzeAndAttach = useCallback(async (recordId) => {
     const analysis = await analyzeRecord(recordId)
