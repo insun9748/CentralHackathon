@@ -72,6 +72,7 @@ function Report() {
     range: `${t.recordCount}회`,
     value: t.averageIntensity,
     avgIntensity: t.averageIntensity,
+    mainCause: t.mainTriggerFactor,
   }))
   const chartMax = Math.max(5, ...chartPoints.map((p) => p.value ?? 0))
 
