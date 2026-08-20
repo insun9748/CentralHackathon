@@ -14,4 +14,6 @@ public class TimeCategoryAnalysisResponse {
     private double averageIntensity;
 
     private int recordCount;
+
+    private String mainTriggerFactor;
 }

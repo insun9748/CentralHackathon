@@ -243,6 +243,11 @@ public class RecordServiceImpl implements RecordService {
                 .orElseThrow(() ->
                         new CustomException(ErrorCode.RECORD_NOT_FOUND));
 
+        // AI 분석이 존재하면 먼저 삭제
+        aiAnalysisRepository.findByRecord(record)
+                .ifPresent(aiAnalysisRepository::delete);
+
+        // 이후 기록 삭제
         recordRepository.delete(record);
     }
 

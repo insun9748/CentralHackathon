@@ -154,6 +154,26 @@ public class ReportServiceImpl implements ReportService {
                                     .average()
                                     .orElse(0.0);
 
+                    String mainTriggerFactor =
+                            categoryRecords.stream()
+                                    .map(Record::getAiAnalysis)
+                                    .filter(ai -> ai != null)
+                                    .map(AiAnalysis::getTriggerFactor)
+                                    .filter(this::isValidFactor)
+                                    .collect(Collectors.groupingBy(
+                                            factor -> factor,
+                                            Collectors.counting()
+                                    ))
+                                    .entrySet()
+                                    .stream()
+                                    .max(
+                                            Comparator.comparingLong(
+                                                    entry2 -> entry2.getValue()
+                                            )
+                                    )
+                                    .map(entry2 -> entry2.getKey())
+                                    .orElse(null);
+
                     return TimeCategoryAnalysisResponse.builder()
                             .timeCategoryId(
                                     timeCategory.getTimeCategoryId()
@@ -167,6 +187,7 @@ public class ReportServiceImpl implements ReportService {
                             .recordCount(
                                     categoryRecords.size()
                             )
+                            .mainTriggerFactor(mainTriggerFactor)
                             .build();
                 })
                 .sorted(
