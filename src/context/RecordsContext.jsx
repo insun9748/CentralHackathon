@@ -15,12 +15,12 @@ function mapRecord(record) {
     intensityId: record.intensity?.intensityId ?? null,
     intensity: record.intensity?.level ?? 0,
     emotion: emotionFromIntensityLevel(record.intensity?.level),
-    title: record.memo || '기록',
+    title: record.aiSummary || record.memo || '기록',
     memo: record.memo ?? '',
     status: record.status,
-    // 목록 조회 응답에는 AI 분석 결과가 없어서, 분석을 조회하기 전까지는 비워둔다
-    triggerType: '-',
-    symptom: record.intensity?.description ?? '',
+    // 아직 AI 분석 전인 기록은 백엔드에서 null로 내려온다
+    triggerType: record.triggerFactor || '-',
+    symptom: record.symptomSummary || '-',
     analysis: null,
   }
 }
